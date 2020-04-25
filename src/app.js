@@ -4,6 +4,10 @@ import mount from "koa-mount";
 import graphqlHTTP from "koa-graphql";
 
 import schema from "./graphql/schema";
+import connectDB from "./database/connection/connection";
+
+// Establish DB connection. Should be invoked only once.
+connectDB();
 
 const koa = new Koa();
 const app = new Router();
@@ -23,7 +27,7 @@ app.use(
 );
 
 koa.use(app.routes());
-const server = koa.listen(3000, () => {
+const server = koa.listen(3010, () => {
   const address = server.address();
   const url = `http://${address.address}:${address.port}`;
   console.log(`Server listening on ${url}`);
