@@ -4,6 +4,10 @@ import mount from 'koa-mount';
 import graphqlHTTP from 'koa-graphql';
 
 import schema from './graphql/schema';
+import connectDB from "./database/connection/connection";
+
+// Establish DB connection. Should be invoked only once.
+connectDB();
 
 const koa = new Koa();
 const app = new Router();
