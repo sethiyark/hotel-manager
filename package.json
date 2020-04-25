@@ -1,0 +1,30 @@
+{
+  "name": "hotel-manager",
+  "version": "1.0.0",
+  "repository": "https://github.com/sethiyark/hotel-manager.git",
+  "author": "Raunak Sethiya <raunak@peoplegrove.com>",
+  "private": true,
+  "scripts": {
+    "start": "babel-node src/app"
+  },
+  "dependencies": {
+    "koa": "^2.9.0",
+    "koa-router": "^8.0.0-alpha.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0"
+  },
+  "babel": {
+    "plugins": [
+      "transform-async-to-generator",
+      "transform-es2015-modules-commonjs",
+      "transform-class-properties",
+      "transform-object-rest-spread"
+    ],
+    "sourceMaps": true
+  }
+}
