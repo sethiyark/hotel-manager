@@ -3,6 +3,7 @@ import Router from 'koa-router';
 import mount from 'koa-mount';
 import graphqlHTTP from 'koa-graphql';
 
+import './global';
 import schema from './graphql/schema';
 import connectDB from './database/connection/connection';
 
