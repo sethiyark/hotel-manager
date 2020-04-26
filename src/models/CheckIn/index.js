@@ -1,6 +1,6 @@
-import mongoose from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-const checkinSchema = mongoose.Schema({
+const checkInSchema = Schema({
   customer_id: Number,
 
   in_time: String,
@@ -24,4 +24,12 @@ const checkinSchema = mongoose.Schema({
   ],
 });
 
-module.exports = mongoose.model('Checkin', checkinSchema);
+const Model = model('CheckIn', checkInSchema);
+
+class CheckIn extends Model {
+  //
+}
+
+export default CheckIn;
+
+export { CheckIn };
