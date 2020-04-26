@@ -14,7 +14,9 @@ class RoomIcon extends PureComponent {
           <i
             className="room-block__icon__color"
             style={{ backgroundColor: color }}
-          />
+          >
+            <i className="room-block__icon__door" />
+          </i>
         </i>
       </span>
     );
