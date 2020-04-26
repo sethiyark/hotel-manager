@@ -1,37 +1,28 @@
 import Koa from 'koa';
 import Router from 'koa-router';
-import mount from 'koa-mount';
-import graphqlHTTP from 'koa-graphql';
+import koaBody from 'koa-bodyparser';
+import { ApolloServer } from 'apollo-server-koa';
 
 import './global';
-import schema from './graphql/schema';
+import schema from './graphql';
 
-import { Customer } from './models';
+const app = new Koa();
+const router = new Router();
 
-const koa = new Koa();
-const app = new Router();
+// koaBody is needed just for POST.
+router.use(koaBody());
 
-app.get('/', async (ctx) => {
+router.get('/', async (ctx) => {
   ctx.body = 'Test App';
 });
 
-app.get('/customers', async (ctx) => {
-  const text = await Customer.find({});
-  ctx.body = JSON.stringify(text);
-});
+const apolloServer = new ApolloServer({ schema });
+apolloServer.applyMiddleware({ app });
 
-app.use(
-  mount(
-    '/graphql',
-    graphqlHTTP({
-      schema,
-      graphiql: true,
-    })
-  )
-);
+app.use(router.routes());
+app.use(router.allowedMethods());
 
-koa.use(app.routes());
-const server = koa.listen(3000, () => {
+const server = app.listen(3000, () => {
   const address = server.address();
   const url = `http://${address.address}:${address.port}`;
   console.log(`Server listening on ${url}`);
