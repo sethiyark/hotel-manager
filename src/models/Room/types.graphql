@@ -1,0 +1,7 @@
+type Room {
+  displayName: String
+}
+
+type Query {
+  rooms: [Room]
+}

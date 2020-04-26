@@ -1,0 +1,9 @@
+# Add bills object types
+type Bill {
+  billLog: String
+  billPaid: String
+}
+
+type Query {
+  bills: [Bill]
+}

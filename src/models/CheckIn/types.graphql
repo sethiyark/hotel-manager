@@ -1,0 +1,9 @@
+type CheckIn {
+  inTime: String
+  outTime: String
+  state: String
+}
+
+type Query {
+  checkIns: [CheckIn]
+}
