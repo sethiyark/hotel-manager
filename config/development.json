@@ -1,0 +1,6 @@
+{
+  "db_url": "mongodb://localhost:27017/hotel_manager_dev",
+  "db_host": "localhost",
+  "db_port": "27017",
+  "db_name": "hotel_manager_dev"
+}
