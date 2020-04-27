@@ -4,6 +4,7 @@ import koaBody from 'koa-bodyparser';
 import { ApolloServer } from 'apollo-server-koa';
 
 import './global';
+import log from '../config/logger';
 import schema from './graphql';
 
 const app = new Koa();
@@ -25,5 +26,5 @@ app.use(router.allowedMethods());
 const server = app.listen(3000, () => {
   const address = server.address();
   const url = `http://${address.address}:${address.port}`;
-  console.log(`Server listening on ${url}`);
+  log.info(`Server listening on ${url}`);
 });
