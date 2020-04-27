@@ -2,6 +2,8 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = () => {
+  const mode = process.env.NODE_ENV || 'development';
+
   return {
     entry: './res/index.js',
     output: {
@@ -28,7 +30,7 @@ module.exports = () => {
     node: {
       fs: 'empty',
     },
-    mode: 'development',
+    mode,
     devServer: {
       contentBase: path.join(__dirname, 'dist'),
       publicPath: 'http://localhost:8000/',
