@@ -27,7 +27,8 @@
   },
   "globals": {
     "_": true,
-    "Promise": true
+    "Promise": true,
+    "log": true
   },
   "rules": {
     "spaced-comment": 1,
