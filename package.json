@@ -8,7 +8,7 @@
   ],
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development babel-node src/app",
+    "start": "NODE_ENV=development nodemon src/app --exec babel-node",
     "start:stage": "NODE_ENV=staging babel-node src/app",
     "start:prod": "NODE_ENV=production babel-node src/app",
     "build": "babel-changed",
@@ -54,6 +54,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "html-webpack-plugin": "^4.2.0",
+    "nodemon": "^2.0.3",
     "prettier": "^2.0.5",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
@@ -74,5 +75,18 @@
       "@babel/preset-react"
     ],
     "sourceMaps": true
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "res/*"
+    ],
+    "watch": [
+      "package.json",
+      "src"
+    ],
+    "env": {
+      "NODE_ENV": "development"
+    },
+    "ext": "js,json,graphql"
   }
 }
