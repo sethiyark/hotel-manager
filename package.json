@@ -2,7 +2,10 @@
   "name": "hotel-manager",
   "version": "1.0.0",
   "repository": "https://github.com/sethiyark/hotel-manager.git",
-  "author": "Raunak Sethiya <raunak@peoplegrove.com>",
+  "author": "Raunak Sethiya <sethiyark@gmail.com>",
+  "contributors": [
+    "Krushna Sharma <krushnasharma24@gmail.com>"
+  ],
   "private": true,
   "scripts": {
     "start": "NODE_ENV=development babel-node src/app",
