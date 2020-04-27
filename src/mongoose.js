@@ -9,7 +9,7 @@ const termination = chalk.bold.yellow;
 
 let DB_URL = config.get('db_url');
 
-if (!DB_URL && DB_URL.length <= 0) {
+if (!DB_URL || DB_URL.length <= 0) {
   const DB_HOST = config.get('db_host');
   const DB_PORT = config.get('db_port');
   const DB_NAME = config.get('db_name');
