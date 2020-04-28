@@ -5,7 +5,7 @@ module.exports = () => {
   const mode = process.env.NODE_ENV || 'development';
 
   return {
-    entry: './res/js/index.js',
+    entry: path.resolve(__dirname, 'res/js/index.js'),
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'index_bundle.js',
