@@ -5,7 +5,7 @@ module.exports = () => {
   const mode = process.env.NODE_ENV || 'development';
 
   return {
-    entry: './res/index.js',
+    entry: './res/js/index.js',
     output: {
       path: path.resolve(__dirname, 'dist'),
       filename: 'index_bundle.js',
@@ -41,7 +41,7 @@ module.exports = () => {
     },
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'res/index.html',
+        template: 'res/public/index.html',
       }),
     ],
   };
