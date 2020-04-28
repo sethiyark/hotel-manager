@@ -24,3 +24,5 @@ class RoomIcon extends PureComponent {
 }
 
 export default RoomIcon;
+
+export { RoomIcon };
