@@ -1,17 +1,25 @@
 import React from 'react';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { render } from 'react-dom';
+import { map } from 'lodash';
 
-import RoomIcon from './components/RoomIcon';
+import routes from './routes';
 
 class App extends React.Component {
+  getRoute = (route, key) => <Route key={key} {...route} />;
+
   render() {
     return (
-      <>
-        <h1>React App</h1>
-        <RoomIcon />
-      </>
+      <main id="main">
+        <Switch>{map(routes, this.getRoute)}</Switch>
+      </main>
     );
   }
 }
 
-render(<App />, document.getElementById('app'));
+render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('app')
+);
