@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const billSchema = Schema({
+const billSchema = new Schema({
   bill_log: Object,
 
   bill_paid: Object,

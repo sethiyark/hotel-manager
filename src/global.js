@@ -1,11 +1,11 @@
+// @ts-nocheck
 import _ from 'lodash';
-import Promise from 'bluebird';
-import appRoot from 'app-root-path';
+import bluebird from 'bluebird';
 import connectDB from './mongoose';
 import log from './logger'; // initializes winston logger
 
-global.Promise = Promise;
-global.appRoot = appRoot;
+global.Promise.map = bluebird.map.bind(bluebird);
+global.Promise.reduce = bluebird.reduce.bind(bluebird);
 global._ = _;
 global.log = log;
 

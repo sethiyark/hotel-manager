@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const roomSchema = Schema({
+const roomSchema = new Schema({
   display_name: String,
 
   config: {

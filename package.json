@@ -46,6 +46,7 @@
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
     "@types/bluebird": "^3.5.30",
+    "@types/lodash": "^4.14.150",
     "@types/mongoose": "^5.7.14",
     "@typescript-eslint/eslint-plugin": "^2.30.0",
     "@typescript-eslint/parser": "^2.30.0",

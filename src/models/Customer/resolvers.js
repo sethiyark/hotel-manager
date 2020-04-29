@@ -2,7 +2,7 @@ import { Customer } from '..';
 
 export default {
   Query: {
-    customers: () => {
+    customers: async () => {
       return Customer.find({});
     },
   },

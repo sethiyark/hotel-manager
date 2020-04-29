@@ -26,6 +26,7 @@ log.info('Starting Koa server');
 
 const server = app.listen(3001, () => {
   const address = server.address();
+  // @ts-ignore
   const url = `http://${address.address}:${address.port}`;
   log.info(`Server listening on ${url}`);
 });

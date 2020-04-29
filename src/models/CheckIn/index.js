@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose';
 
-const checkInSchema = Schema({
+const checkInSchema = new Schema({
   customer_id: Number,
 
   in_time: String,
