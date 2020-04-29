@@ -1,12 +1,12 @@
 import { Schema, model } from 'mongoose';
 
 const roomSchema = new Schema({
-  display_name: String,
+  displayName: String,
 
   config: {
     western: Boolean,
-    air_conditioned: Boolean,
-    priority_cleaned: Boolean, // user_id
+    airConditioned: Boolean,
+    priorityCleaned: Boolean, // user_id
   },
 });
 

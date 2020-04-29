@@ -7,14 +7,14 @@ const customerSchema = new Schema({
 
   address: String,
 
-  checkin_id: Number,
+  checkinId: Number,
 
-  id_proofs: [
+  idProofs: [
     {
-      id_type: String,
+      idType: String,
       scans: [
         {
-          img_url: String,
+          imgUrl: String,
         },
       ],
     },

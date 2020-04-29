@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
 
 const billSchema = new Schema({
-  bill_log: Object,
+  billLog: Object,
 
-  bill_paid: Object,
+  billPaid: Object,
 });
 
 const Model = model('Checkin', billSchema);

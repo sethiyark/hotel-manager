@@ -1,17 +1,17 @@
 import { Schema, model } from 'mongoose';
 
 const checkInSchema = new Schema({
-  customer_id: Number,
+  customerId: Number,
 
-  in_time: String,
+  inTime: String,
 
-  out_time: String,
+  outTime: String,
 
-  n_occupants: Number,
+  nOccupants: Number,
 
-  room_ids: [{ type: Number }],
+  roomIds: [{ type: Number }],
 
-  bill_id: Number,
+  billId: Number,
 
   state: String, // [occupied/maintenance/cleaning/booked]
 
