@@ -2,14 +2,13 @@ import appRoot from 'app-root-path';
 import { createLogger, transports, format } from 'winston';
 import chalk from 'chalk';
 import config from 'config';
-
-const stripAnsi = require('strip-ansi');
+import stripAnsi from 'strip-ansi';
+import { get } from 'lodash';
 
 const LOG_CONFIG = config.get('logger');
 const DEFAULT_LABEL = 'default';
-const LOG_LEVEL = LOG_CONFIG && LOG_CONFIG.level ? LOG_CONFIG.level : 'info';
-
-const TIME_DIFF_LEVELS = ['verbose', 'debug', 'silly', 'warn'];
+const LOG_LEVEL = get(LOG_CONFIG, 'level', 'info');
+const TIME_DIFF_LEVELS = ['verbose', 'debug', 'silly'];
 const customColors = {
   default: chalk.white,
   error: chalk.red,
@@ -21,30 +20,22 @@ const customColors = {
 
 const customConsoleFormat = format((info) => {
   if (info.timestamp) {
-    // eslint-disable-next-line no-param-reassign
     info.timestamp = customColors.timestamp(info.timestamp);
   }
 
   if (info.ms) {
-    // eslint-disable-next-line no-param-reassign
     info.ms = chalk.italic(info.ms);
   }
 
   if (!info.label) {
-    // eslint-disable-next-line no-param-reassign
     info.label = DEFAULT_LABEL;
   }
 
   if (stripAnsi(info.level) in customColors) {
     const levelColor = customColors[stripAnsi(info.level)];
 
-    // eslint-disable-next-line no-param-reassign
     info.label = levelColor.bold(info.label);
-
-    // eslint-disable-next-line no-param-reassign
     info.level = levelColor(info.level);
-
-    // eslint-disable-next-line no-param-reassign
     info.message = levelColor(info.message);
   }
 

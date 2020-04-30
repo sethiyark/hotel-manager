@@ -37,6 +37,7 @@
     "no-else-return": "off",
     "no-plusplus": 0,
     "no-console": 0,
+    "no-underscore-dangle": 0,
     "prettier/prettier": [
 			"warn",
 			{
@@ -45,6 +46,7 @@
 			}
 		],
     "no-unused-vars": 1,
-    "camelcase": 1
+    "camelcase": 1,
+    "no-param-reassign": ["error", { "props": false }]
   }
 }
