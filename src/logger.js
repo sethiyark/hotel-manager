@@ -1,5 +1,5 @@
 import appRoot from 'app-root-path';
-import { createLogger, transports, format } from 'winston';
+import { loggers, transports, format } from 'winston';
 import chalk from 'chalk';
 import config from 'config';
 
@@ -9,27 +9,27 @@ const LOG_CONFIG = config.get('logger');
 const DEFAULT_LABEL = 'default';
 const LOG_LEVEL = LOG_CONFIG && LOG_CONFIG.level ? LOG_CONFIG.level : 'info';
 
+const DEFAULT_LOG_FILE =
+  LOG_CONFIG && LOG_CONFIG.default_log_file
+    ? LOG_CONFIG.default_log_file
+    : '/log/app.log';
+
+const ERROR_LOG_FILE =
+  LOG_CONFIG && LOG_CONFIG.error_log_file
+    ? LOG_CONFIG.error_log_file
+    : '/log/app.log';
+
 const TIME_DIFF_LEVELS = ['verbose', 'debug', 'silly', 'warn'];
+
 const customColors = {
   default: chalk.white,
   error: chalk.red,
   warn: chalk.yellow,
   info: chalk.green,
   debug: chalk.cyan,
-  timestamp: chalk.dim.gray,
 };
 
 const customConsoleFormat = format((info) => {
-  if (info.timestamp) {
-    // eslint-disable-next-line no-param-reassign
-    info.timestamp = customColors.timestamp(info.timestamp);
-  }
-
-  if (info.ms) {
-    // eslint-disable-next-line no-param-reassign
-    info.ms = chalk.italic(info.ms);
-  }
-
   if (!info.label) {
     // eslint-disable-next-line no-param-reassign
     info.label = DEFAULT_LABEL;
@@ -37,6 +37,11 @@ const customConsoleFormat = format((info) => {
 
   if (stripAnsi(info.level) in customColors) {
     const levelColor = customColors[stripAnsi(info.level)];
+
+    if (info.timestamp) {
+      // eslint-disable-next-line no-param-reassign
+      info.timestamp = levelColor.dim(info.timestamp);
+    }
 
     // eslint-disable-next-line no-param-reassign
     info.label = levelColor.bold(info.label);
@@ -46,6 +51,11 @@ const customConsoleFormat = format((info) => {
 
     // eslint-disable-next-line no-param-reassign
     info.message = levelColor(info.message);
+
+    if (info.ms) {
+      // eslint-disable-next-line no-param-reassign
+      info.ms = levelColor.italic(info.ms);
+    }
   }
 
   return info;
@@ -60,9 +70,27 @@ const applyTimeDiff = format((info) => {
 });
 
 const transportOptions = {
+  error: {
+    level: 'error',
+    filename: appRoot + ERROR_LOG_FILE,
+    format: format.combine(
+      format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
+
+      applyTimeDiff(),
+
+      format.printf(
+        (info) =>
+          `${info.timestamp} [${info.level}] [${info.label}]: ${info.message}`
+      )
+    ),
+    handleExceptions: true,
+    maxsize: 5242880, // 5MB
+    maxFiles: 2,
+  },
+
   file: {
     level: LOG_LEVEL,
-    filename: `${appRoot}/logs/app.log`,
+    filename: appRoot + DEFAULT_LOG_FILE,
     format: format.combine(
       format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
 
@@ -98,20 +126,21 @@ const transportOptions = {
   },
 };
 
-const customTransports = [];
+const customTransports = [
+  new transports.Console(transportOptions.console),
+  new transports.File(transportOptions.error),
+];
 
 if (
   process.env.NODE_ENV === 'production' ||
   process.env.NODE_ENV === 'staging'
 ) {
   customTransports.push(new transports.File(transportOptions.file));
-} else {
-  customTransports.push(new transports.Console(transportOptions.console));
 }
 
 console.log(chalk.bold.green('Initializing winston logger'));
 
-const logger = createLogger({
+const logger = loggers.add('default', {
   transports: customTransports,
   exitOnError: false, // do not exit on handled exceptions
 });

@@ -5,6 +5,8 @@
   "db_name": "hotel_manager_dev",
 
   "logger": {
-    "level": "debug"
+    "level": "debug",
+    "default_log_file": "/logs/app.log",
+    "error_log_file": "/logs/error.log"
   }
 }
