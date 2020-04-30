@@ -30,10 +30,6 @@ const customColors = {
 };
 
 const customConsoleFormat = format((info) => {
-  if (info.timestamp) {
-    info.timestamp = customColors.timestamp(info.timestamp);
-  }
-
   if (info.ms) {
     info.ms = chalk.italic(info.ms);
   }
@@ -46,17 +42,14 @@ const customConsoleFormat = format((info) => {
     const levelColor = customColors[stripAnsi(info.level)];
 
     if (info.timestamp) {
-      // eslint-disable-next-line no-param-reassign
       info.timestamp = levelColor.dim(info.timestamp);
     }
 
-    // eslint-disable-next-line no-param-reassign
     info.label = levelColor.bold(info.label);
     info.level = levelColor(info.level);
     info.message = levelColor(info.message);
 
     if (info.ms) {
-      // eslint-disable-next-line no-param-reassign
       info.ms = levelColor.italic(info.ms);
     }
   }
