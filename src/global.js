@@ -18,5 +18,4 @@ global.cfg = (configPath) => {
 };
 
 // Establish DB connection. Should be invoked only once.
-log.info('Initiating database connection');
 connectDB();

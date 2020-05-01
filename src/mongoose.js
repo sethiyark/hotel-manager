@@ -13,6 +13,7 @@ if (!DB_URL || DB_URL.length <= 0) {
 }
 
 const connectDB = () => {
+  log.info('Initiating database connection');
   mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
   mongoose.connection.on('connected', () => {
@@ -20,18 +21,11 @@ const connectDB = () => {
   });
 
   mongoose.connection.on('error', (err) => {
-    log.error(`Error in connection with database: ${err}`);
+    log.error(`Error in connection with database: (${err.message})`);
   });
 
   mongoose.connection.on('disconnected', () => {
-    log.info('Database connection is closed');
-  });
-
-  process.on('SIGINT', () => {
-    mongoose.connection.close(() => {
-      log.warn('Database connection is closed due to application termination');
-      process.exit(0);
-    });
+    log.info('Database connection closed successfully');
   });
 };
 

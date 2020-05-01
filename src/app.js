@@ -2,6 +2,7 @@ import Koa from 'koa';
 import Router from 'koa-router';
 import koaBody from 'koa-bodyparser';
 import { ApolloServer } from 'apollo-server-koa';
+import mongoose from 'mongoose';
 
 import './global';
 import schema from './graphql';
@@ -32,16 +33,21 @@ const server = app.listen(3001, () => {
 });
 
 function cleanup() {
-  log.info('Attempting to gracefully shut down koa server');
-
-  server.close((err) => {
-    if (err) {
-      log.error(`Error while shutting down koa server: ${err.toString()}`);
-      process.exit(1);
-    } else {
-      log.info('Koa server shut down successful');
-      process.exit(0);
+  log.verbose('Terminating database connection');
+  mongoose.connection.close((error) => {
+    if (error) {
+      log.error(`Error closing DB connection: (${error.message})`);
     }
+    log.verbose('Attempting to gracefully shut down koa server');
+    server.close((err) => {
+      if (err) {
+        log.error(`Error while shutting down koa server: (${err.message})`);
+      } else {
+        log.info('Koa server shut down successful');
+      }
+      if (err || error) process.exit(1);
+      process.exit(0);
+    });
   });
 }
 

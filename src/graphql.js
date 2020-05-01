@@ -7,7 +7,7 @@ const allModels = _.filter(fs.readdirSync(modelBasePath), (file) =>
   fs.statSync(path.resolve(modelBasePath, file)).isDirectory()
 );
 
-log.debug('Initiate building and merging GraphQL schemas');
+log.verbose('Initiate building and merging GraphQL schemas');
 
 const subschemas = _.map(allModels, (model) => {
   try {
@@ -22,13 +22,13 @@ const subschemas = _.map(allModels, (model) => {
 
     const schema = makeExecutableSchema({ typeDefs, resolvers });
     return { schema };
-  } catch {
-    log.error(`gql schema error in model: ${model}`);
+  } catch (err) {
+    log.error(`gql schema error in ${model} model: (${err.message})`);
     return null;
   }
 }).filter(Boolean);
 
-log.info('GrapghQL schemas compiled');
+log.verbose('GraphQL schemas compiled');
 
 const schema = mergeSchemas({ subschemas });
 
