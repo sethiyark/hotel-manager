@@ -14,7 +14,9 @@ const DEFAULT_LOG_FILE = get(LOG_CONFIG, 'default_log_file', 'app.log');
 const ERROR_LOG_FILE = get(LOG_CONFIG, 'error_log_file', 'error.log');
 
 const DEFAULT_LABEL = 'App';
-const TIME_DIFF_LEVELS = ['verbose', 'debug', 'silly'];
+const TIME_DIFF_LEVELS = ['debug', 'silly'];
+const FILE_INFO_LEVELS = ['error', 'warn'];
+
 const customColors = {
   default: chalk.white,
   error: chalk.red,
@@ -44,6 +46,10 @@ const customConsoleFormat = format((info) => {
     if (info.ms) {
       info.ms = levelColor.italic(info.ms);
     }
+
+    if (info.callerInfo) {
+      info.callerInfo = chalk.bgBlue.white(info.callerInfo);
+    }
   }
 
   return info;
@@ -53,6 +59,15 @@ const customConsoleFormat = format((info) => {
 const applyTimeDiff = format((info) => {
   if (TIME_DIFF_LEVELS.includes(stripAnsi(info.level))) {
     format.ms().transform(info);
+  }
+  return info;
+});
+
+const applyFileInfo = format((info) => {
+  if (FILE_INFO_LEVELS.includes(stripAnsi(info.level))) {
+    const targetValue = new Error().stack.split('at ')[22] || '';
+    const targetFile = targetValue.match(/\((.*)\)/) || [null, targetValue];
+    [, info.callerInfo] = targetFile;
   }
   return info;
 });
@@ -71,13 +86,18 @@ const baseFormat = (label) =>
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
     applyTimeDiff(),
     applyLabel(label),
+    applyFileInfo(),
     format.printf((info) => {
       if (info.message && isObject(info.message)) {
         info.isJSON = true;
         const spaces = stringify(info.message).length > 50 ? 2 : 0;
         info.message = stringify(info.message, null, spaces);
       }
-      return `${info.timestamp} [${info.level}] [${info.label}]: ${info.message}`;
+      const template = [
+        info.callerInfo,
+        `${info.timestamp} [${info.level}] [${info.label}]: ${info.message}`,
+      ].filter(Boolean);
+      return template.join('\n');
     })
   );
 
@@ -106,11 +126,15 @@ const getWinstonLogger = ({ label = DEFAULT_LABEL, onlyFile = '' } = {}) => {
       format: format.combine(
         baseFormat(label),
         customConsoleFormat(),
-        format.printf((info) =>
-          info.ms
-            ? `${info.timestamp} [${info.label}] [${info.level}]: ${info.message} (${info.ms})`
-            : `${info.timestamp} [${info.label}] [${info.level}]: ${info.message}`
-        )
+        format.printf((info) => {
+          const result = [
+            info.callerInfo,
+            info.ms
+              ? `${info.timestamp} [${info.label}] [${info.level}]: ${info.message} (${info.ms})`
+              : `${info.timestamp} [${info.label}] [${info.level}]: ${info.message}`,
+          ].filter(Boolean);
+          return result.join('\n');
+        })
       ),
       colorize: false,
       handleExceptions: true,
