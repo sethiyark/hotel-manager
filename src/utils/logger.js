@@ -23,6 +23,8 @@ const customColors = {
   warn: chalk.yellow,
   info: chalk.green,
   debug: chalk.cyan,
+  verbose: chalk.hex('#DDA0DD'),
+  silly: chalk.gray,
 };
 
 const customConsoleFormat = format((info) => {
