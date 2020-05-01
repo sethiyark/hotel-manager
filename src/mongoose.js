@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import config from 'config';
+import getWinstonLogger from './utils/logger';
 
 let DB_URL = config.get('db_url');
 
@@ -11,7 +12,7 @@ if (!DB_URL || DB_URL.length <= 0) {
   DB_URL = `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
 }
 
-module.exports = () => {
+const connectDB = () => {
   mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
 
   mongoose.connection.on('connected', () => {
@@ -33,3 +34,18 @@ module.exports = () => {
     });
   });
 };
+
+if (!mongoose.Model.log) {
+  Object.defineProperty(mongoose.Model, 'log', {
+    get() {
+      if (this._log) return this._log;
+      this._log = getWinstonLogger({ label: this.name });
+      return this._log;
+    },
+    set(newLog) {
+      this._log = newLog;
+    },
+  });
+}
+
+export default connectDB;

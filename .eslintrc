@@ -28,7 +28,8 @@
   "globals": {
     "_": true,
     "Promise": true,
-    "log": true
+    "log": true,
+    "cfg": true
   },
   "rules": {
     "spaced-comment": 1,
