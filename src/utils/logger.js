@@ -3,7 +3,9 @@ import { transports, format, createLogger } from 'winston';
 import chalk from 'chalk';
 import config from 'config';
 import stripAnsi from 'strip-ansi';
-import { get } from 'lodash';
+import { get, isObject } from 'lodash';
+import stringify from 'json-stringify-safe';
+import colorize from 'json-colorizer';
 
 const LOG_CONFIG = config.get('logger');
 
@@ -35,7 +37,9 @@ const customConsoleFormat = format((info) => {
 
     info.label = levelColor.bold(info.label);
     info.level = levelColor(info.level);
-    info.message = levelColor(info.message);
+    info.message = info.isJSON
+      ? colorize(info.message)
+      : levelColor(info.message);
 
     if (info.ms) {
       info.ms = levelColor.italic(info.ms);
@@ -67,10 +71,14 @@ const baseFormat = (label) =>
     format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss.SSS' }),
     applyTimeDiff(),
     applyLabel(label),
-    format.printf(
-      (info) =>
-        `${info.timestamp} [${info.level}] [${info.label}]: ${info.message}`
-    )
+    format.printf((info) => {
+      if (info.message && isObject(info.message)) {
+        info.isJSON = true;
+        const spaces = stringify(info.message).length > 50 ? 2 : 0;
+        info.message = stringify(info.message, null, spaces);
+      }
+      return `${info.timestamp} [${info.level}] [${info.label}]: ${info.message}`;
+    })
   );
 
 const getWinstonLogger = ({ label = DEFAULT_LABEL, onlyFile = '' } = {}) => {
