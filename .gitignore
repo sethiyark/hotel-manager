@@ -102,3 +102,7 @@ dist
 
 # Local/Private config
 config/local.json
+
+# Unwanted temporary files
+.tmp
+garbage
