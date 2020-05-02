@@ -5,7 +5,7 @@ import { Logger } from 'winston';
 declare global {
   const _: typeof lodash;
   const log: Logger;
-  const cfg: (configPath: string) => any;
+  const cfg: (setting: string, fallback?: any) => any;
 
   interface PromiseConstructor {
     map: typeof bluebird.map;

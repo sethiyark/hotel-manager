@@ -9,11 +9,14 @@ global.Promise.map = bluebird.map.bind(bluebird);
 global.Promise.reduce = bluebird.reduce.bind(bluebird);
 global._ = _;
 global.log = getWinstonLogger();
-global.cfg = (configPath) => {
+global.cfg = (setting, fallback = null) => {
   try {
-    return config.get(configPath);
+    return config.get(setting);
   } catch {
-    return null;
+    if (typeof fallback === 'function') {
+      return fallback();
+    }
+    return fallback;
   }
 };
 
