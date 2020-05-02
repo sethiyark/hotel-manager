@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import { render } from 'react-dom';
 import { map } from 'lodash';
+import 'semantic-ui-css/semantic.min.css';
 
 import routes from './routes';
 
