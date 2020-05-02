@@ -1,12 +1,14 @@
 {
-  "db_url": "mongodb://localhost:27017/hotel_manager_stage",
-  "db_host": "localhost",
-  "db_port": "27017",
-  "db_name": "hotel_manager_stage",
+  "db": {
+    "url": "mongodb://localhost:27017/hotel_manager_stage",
+    "host": "localhost",
+    "port": "27017",
+    "name": "hotel_manager_stage"
+  },
 
   "logger": {
     "level": "debug",
-    "default_log_file": "app.log",
-    "error_log_file": "error.log"
+    "outLog": "{{appRoot}}/logs/app.log",
+    "outError": "{{appRoot}}/logs/error.log"
   }
 }

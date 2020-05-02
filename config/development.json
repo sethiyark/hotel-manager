@@ -1,12 +1,14 @@
 {
-  "db_url": "mongodb://localhost:27017/hotel_manager_dev",
-  "db_host": "localhost",
-  "db_port": "27017",
-  "db_name": "hotel_manager_dev",
+  "db": {
+    "url": "mongodb://localhost:27017/hotel_manager_dev",
+    "host": "localhost",
+    "port": "27017",
+    "name": "hotel_manager_dev"
+  },
 
   "logger": {
     "level": "debug",
-    "default_log_file": "app.log",
-    "error_log_file": "error.log"
+    "outLog": "{{appRoot}}/logs/app.log",
+    "outError": "{{appRoot}}/logs/error.log"
   }
 }

@@ -10,8 +10,16 @@ import colorize from 'json-colorizer';
 const LOG_CONFIG = config.get('logger');
 
 const LOG_LEVEL = get(LOG_CONFIG, 'level', 'info');
-const DEFAULT_LOG_FILE = get(LOG_CONFIG, 'default_log_file', 'app.log');
-const ERROR_LOG_FILE = get(LOG_CONFIG, 'error_log_file', 'error.log');
+const DEFAULT_LOG_FILE = get(
+  LOG_CONFIG,
+  'outLog',
+  `${appRoot}/logs/app.log`
+).replace('{{appRoot}}', appRoot);
+const ERROR_LOG_FILE = get(
+  LOG_CONFIG,
+  'outError',
+  `${appRoot}/logs/error.log`
+).replace('{{appRoot}}', appRoot);
 
 const DEFAULT_LABEL = 'App';
 const TIME_DIFF_LEVELS = ['debug', 'silly'];
@@ -107,7 +115,7 @@ const getWinstonLogger = ({ label = DEFAULT_LABEL, onlyFile = '' } = {}) => {
   const transportOptions = {
     error: {
       level: 'error',
-      filename: `${appRoot}/logs/${ERROR_LOG_FILE}`,
+      filename: ERROR_LOG_FILE,
       format: baseFormat(label),
       handleExceptions: true,
       maxsize: 5242880, // 5MB
@@ -116,7 +124,7 @@ const getWinstonLogger = ({ label = DEFAULT_LABEL, onlyFile = '' } = {}) => {
 
     file: {
       level: LOG_LEVEL,
-      filename: `${appRoot}/logs/${onlyFile || DEFAULT_LOG_FILE}`,
+      filename: onlyFile || DEFAULT_LOG_FILE,
       format: baseFormat(label),
       handleExceptions: true,
       maxsize: 5242880, // 5MB
