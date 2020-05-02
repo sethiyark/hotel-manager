@@ -1,17 +1,21 @@
+import React from 'react';
 import loadable from '@loadable/component';
+import { Loader } from 'semantic-ui-react';
+
+const Loading = () => <Loader active />;
 
 const routes = [
   {
     path: '/',
     component: loadable(() => import('./modules/Home'), {
-      fallback: 'loading',
+      fallback: <Loading />,
     }),
     exact: true,
   },
   {
     path: '/dashboard',
     component: loadable(() => import('./modules/Dashboard'), {
-      fallback: 'loading',
+      fallback: <Loading />,
     }),
     exact: true,
   },
