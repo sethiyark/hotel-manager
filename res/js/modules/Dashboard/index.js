@@ -10,7 +10,7 @@ const roomNo = '303';
 const commonRoomConfig = {
   western: true,
   airConditioned: true,
-  priorityCleaned: 'P2',
+  priorityCleaned: '2',
 };
 
 const config = [
@@ -21,14 +21,15 @@ const config = [
 
 class Dashboard extends PureComponent {
   renderRow = (room, index) => {
-    const className = index % 2 ? 'icon-right' : 'icon-left';
+    const textAlign = index % 2 ? 'left' : 'right';
     return (
-      <Grid.Column key={room}>
+      <Grid.Column key={room} textAlign={textAlign}>
         <RoomIcon
-          className={className}
+          className="room-item"
           size={60}
           config={commonRoomConfig}
           roomNo={roomNo}
+          mirror={index % 2}
         />
       </Grid.Column>
     );
