@@ -36,7 +36,7 @@ router.get('/*', async (ctx, next) => {
 });
 
 const apolloServer = new ApolloServer({ schema, plugins });
-apolloServer.applyMiddleware({ app });
+apolloServer.applyMiddleware({ app, path: '/api' });
 
 app.use(router.routes());
 app.use(router.allowedMethods());
