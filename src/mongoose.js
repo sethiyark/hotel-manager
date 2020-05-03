@@ -10,7 +10,11 @@ const connectDB = () => {
     return `mongodb://${DB_HOST}:${DB_PORT}/${DB_NAME}`;
   });
 
-  mongoose.connect(DB_URL, { useNewUrlParser: true, useUnifiedTopology: true });
+  mongoose.connect(DB_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  });
 
   mongoose.connection.on('connected', () => {
     log.info(`Database connection established with URL: ${DB_URL}`);

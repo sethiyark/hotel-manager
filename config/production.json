@@ -10,5 +10,9 @@
     "level": "info",
     "outLog": "{{appRoot}}/logs/app.log",
     "outError": "{{appRoot}}/logs/error.log"
+  },
+
+  "auth": {
+    "jwtKey": "appAdm1n"
   }
 }
