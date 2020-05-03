@@ -112,6 +112,8 @@ const baseFormat = (label) =>
   );
 
 const getWinstonLogger = ({ label = DEFAULT_LABEL, onlyFile = '' } = {}) => {
+  const customFilePath = onlyFile && `${appRoot}/logs/${onlyFile}`;
+
   const transportOptions = {
     error: {
       level: 'error',
@@ -124,7 +126,7 @@ const getWinstonLogger = ({ label = DEFAULT_LABEL, onlyFile = '' } = {}) => {
 
     file: {
       level: LOG_LEVEL,
-      filename: onlyFile || DEFAULT_LOG_FILE,
+      filename: customFilePath || DEFAULT_LOG_FILE,
       format: baseFormat(label),
       handleExceptions: true,
       maxsize: 5242880, // 5MB

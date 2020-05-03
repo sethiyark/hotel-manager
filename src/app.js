@@ -1,23 +1,41 @@
 import Koa from 'koa';
 import Router from 'koa-router';
 import koaBody from 'koa-bodyparser';
+import cors from '@koa/cors';
+import serve from 'koa-static';
+import koaViews from 'koa-views';
+import path from 'path';
 import { ApolloServer } from 'apollo-server-koa';
 import mongoose from 'mongoose';
 
 import './global';
-import schema from './graphql';
+import { schema, plugins } from './graphql';
 
 const app = new Koa();
 const router = new Router();
 
 // koaBody is needed just for POST.
-router.use(koaBody());
+app.use(koaBody());
 
-router.get('/', async (ctx) => {
-  ctx.body = 'Test App';
+// Support cross origin request for react app
+app.use(cors());
+
+const clientStatic = path.join(__dirname, '../dist/static');
+app.use(
+  koaViews(clientStatic, {
+    extension: 'html',
+    map: {
+      html: 'handlebars',
+    },
+  })
+);
+app.use(serve(clientStatic));
+router.get('/*', async (ctx, next) => {
+  await ctx.render('index');
+  return next();
 });
 
-const apolloServer = new ApolloServer({ schema });
+const apolloServer = new ApolloServer({ schema, plugins });
 apolloServer.applyMiddleware({ app });
 
 app.use(router.routes());
