@@ -5,24 +5,26 @@
     "es6": true
   },
   "extends": [
-    "airbnb-base",
-    "prettier"
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended",
+    "airbnb"
   ],
-  "plugins": ["prettier"],
-  "parser": "babel-eslint",
+  "plugins": ["prettier", "@typescript-eslint"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-			"jsx": true
-    }
+    "parser": "@typescript-eslint/parser",
+    "project": "tsconfig.json"
   },
   "settings": {
     "import/resolver": {
       "node": {
-        "paths": ["node_modules"]
+        "paths": ["node_modules"],
+        "extensions": [".js", ".jsx", ".ts", ".d.ts", ".tsx"]
       }
+    },
+    "import/extensions": [".js", ".jsx", ".ts", ".d.ts", ".tsx"],
+    "import/parsers": {
+      "@typescript-eslint/parser": [".ts", ".d.ts"]
     }
   },
   "globals": {
@@ -34,20 +36,37 @@
   "rules": {
     "spaced-comment": 1,
     "prefer-arrow-callback": 1,
-    "func-names": 1,
+    "func-names": 0,
     "no-else-return": "off",
     "no-plusplus": 0,
     "no-console": 0,
     "no-underscore-dangle": 0,
     "prettier/prettier": [
-			"warn",
-			{
-				"singleQuote": true,
-				"trailingComma": "es5"
-			}
-		],
+      "warn",
+      {
+        "singleQuote": true,
+        "trailingComma": "es5"
+      }
+    ],
     "no-unused-vars": 1,
     "camelcase": 1,
-    "no-param-reassign": ["error", { "props": false }]
+    "no-param-reassign": ["error", { "props": false }],
+
+    "@typescript-eslint/explicit-function-return-type": 0,
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": 1,
+    "indent": "off",
+    "@typescript-eslint/indent": [1, 2],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "js": "never",
+        "jsx": "never",
+        "ts": "never",
+        "tsx": "never",
+        "mjs": "never"
+      }
+    ]
   }
 }

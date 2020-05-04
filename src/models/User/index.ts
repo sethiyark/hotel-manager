@@ -4,6 +4,8 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+import { User as IUser } from '../../../typings/models/User';
+
 const JWT_KEY = _.get(config, ['auth', 'jwtKey'], null);
 
 const userSchema = new Schema({
@@ -40,19 +42,16 @@ const userSchema = new Schema({
   role: String,
 });
 
-// eslint-disable-next-line func-names
-// @ts-ignore
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function (this: IUser, next) {
   // Hash the password before saving the user model
   if (this.isModified('password')) {
     log.verbose('Hashing password');
-    // @ts-ignore
     this.password = await bcrypt.hash(this.password, 8);
   }
   next();
 });
 
-const Model = model('User', userSchema);
+const Model = model<IUser>('User', userSchema);
 
 class User extends Model {
   static async findByCredentials(email, password) {
@@ -61,7 +60,6 @@ class User extends Model {
     if (!user) {
       throw new Error(`User with email '${email}' not found`);
     }
-    // @ts-ignore
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       throw new Error('Invalid login credentials');
@@ -74,7 +72,6 @@ class User extends Model {
       throw new Error('Invalid JWT key');
     }
     const token = jwt.sign({ _id: this._id }, JWT_KEY);
-    // @ts-ignore
     this.tokens = this.tokens.concat({ token });
     try {
       await this.save();
