@@ -17,11 +17,11 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     lowercase: true,
-    // @ts-ignore
     validate: (value) => {
       if (!validator.isEmail(value)) {
         throw new Error('Invalid Email address');
       }
+      return true;
     },
   },
   password: {
@@ -41,10 +41,12 @@ const userSchema = new Schema({
 });
 
 // eslint-disable-next-line func-names
+// @ts-ignore
 userSchema.pre('save', async function (next) {
   // Hash the password before saving the user model
   if (this.isModified('password')) {
     log.verbose('Hashing password');
+    // @ts-ignore
     this.password = await bcrypt.hash(this.password, 8);
   }
   next();
@@ -72,6 +74,7 @@ class User extends Model {
       throw new Error('Invalid JWT key');
     }
     const token = jwt.sign({ _id: this._id }, JWT_KEY);
+    // @ts-ignore
     this.tokens = this.tokens.concat({ token });
     try {
       await this.save();
