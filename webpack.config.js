@@ -7,7 +7,7 @@ module.exports = () => {
   return {
     entry: path.resolve(__dirname, 'res/js/index.js'),
     output: {
-      path: path.resolve(__dirname, 'static'),
+      path: path.resolve(__dirname, 'dist/static'),
       filename: 'index_bundle.js',
     },
     module: {
@@ -47,7 +47,7 @@ module.exports = () => {
     },
     mode,
     devServer: {
-      contentBase: path.join(__dirname, 'dist'),
+      contentBase: path.join(__dirname, 'dist/static'),
       publicPath: 'http://localhost:8000/',
       compress: true,
       port: 8000,
