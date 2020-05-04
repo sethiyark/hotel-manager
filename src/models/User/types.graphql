@@ -10,18 +10,18 @@ type userAuthToken {
   authToken: String
 }
 type Query {
-  rooms: [User]
+  users: [User]
 }
 
 type Mutation {
-  SignupMutation(
+  signup(
     name: String,
     email: String,
     password: String,
     role: String
   ): userAuthToken,
 
-  LoginMutation(
+  login(
     email: String,
     password: String
   ): userAuthToken,

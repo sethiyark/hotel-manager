@@ -10,6 +10,7 @@ import mongoose from 'mongoose';
 
 import './global';
 import { schema, plugins } from './graphql';
+import { updateAuthContext } from './utils/auth';
 
 const app = new Koa();
 const router = new Router();
@@ -35,7 +36,11 @@ router.get('/*', async (ctx, next) => {
   return next();
 });
 
-const apolloServer = new ApolloServer({ schema, plugins });
+const apolloServer = new ApolloServer({
+  schema,
+  plugins,
+  context: updateAuthContext,
+});
 apolloServer.applyMiddleware({ app, path: '/api' });
 
 app.use(router.routes());
