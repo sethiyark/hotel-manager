@@ -1,4 +1,5 @@
 import { Schema, model } from 'mongoose';
+import { Customer as ICustomer } from '../../../typings/models/Customer';
 
 const customerSchema = new Schema({
   name: String,
@@ -26,7 +27,7 @@ const customerSchema = new Schema({
   },
 });
 
-const Model = model('Customer', customerSchema);
+const Model = model<ICustomer>('Customer', customerSchema);
 
 class Customer extends Model {
   // static saveName(name) {

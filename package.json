@@ -8,7 +8,7 @@
   ],
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=development nodemon src/app --exec babel-node",
+    "start": "NODE_ENV=development nodemon src/app --exec babel-node --extensions '.ts'",
     "start:stage": "NODE_ENV=staging babel-node src/app",
     "start:prod": "NODE_ENV=production babel-node src/app",
     "build": "babel-changed",
@@ -54,11 +54,13 @@
     "@babel/core": "^7.9.0",
     "@babel/node": "^7.8.7",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-transform-async-to-generator": "^7.8.3",
     "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.9.4",
+    "@babel/preset-typescript": "^7.9.0",
     "@types/bluebird": "^3.5.30",
     "@types/lodash": "^4.14.150",
     "@types/mongoose": "^5.7.14",
@@ -69,7 +71,7 @@
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "css-loader": "^3.5.3",
     "eslint": "^6.8.0",
-    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-config-airbnb": "^18.1.0",
     "eslint-config-prettier": "^6.11.0",
     "eslint-config-react-app": "^5.2.1",
     "eslint-plugin-flowtype": "^4.7.0",
@@ -92,15 +94,27 @@
   },
   "babel": {
     "plugins": [
+      [
+        "@babel/plugin-proposal-decorators",
+        {
+          "legacy": true
+        }
+      ],
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ],
       "@babel/plugin-transform-async-to-generator",
       "transform-es2015-modules-commonjs",
-      "@babel/plugin-proposal-class-properties",
       "@babel/plugin-proposal-object-rest-spread",
       "@babel/plugin-syntax-dynamic-import"
     ],
     "presets": [
       "@babel/preset-env",
-      "@babel/preset-react"
+      "@babel/preset-react",
+      "@babel/typescript"
     ],
     "sourceMaps": true
   },
@@ -115,6 +129,6 @@
     "env": {
       "NODE_ENV": "development"
     },
-    "ext": "js,json,graphql"
+    "ext": "ts,json,graphql"
   }
 }

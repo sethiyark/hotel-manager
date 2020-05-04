@@ -13,7 +13,7 @@ const allModels = _.filter(fs.readdirSync(modelBasePath), (file) =>
 const subschemas = _.map(allModels, (model) => {
   try {
     const typeDefPath = path.resolve(modelBasePath, model, 'types.graphql');
-    const resolverPath = path.resolve(modelBasePath, model, 'resolvers.js');
+    const resolverPath = path.resolve(modelBasePath, model, 'resolvers.ts');
 
     const typeDefs = fs.readFileSync(typeDefPath, { encoding: 'utf-8' });
 

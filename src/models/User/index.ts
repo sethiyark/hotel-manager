@@ -4,6 +4,8 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
+import { User as IUser } from '../../../typings/models/User';
+
 const JWT_KEY = _.get(config, ['auth', 'jwtKey'], null);
 
 const userSchema = new Schema({
@@ -17,11 +19,11 @@ const userSchema = new Schema({
     required: true,
     unique: true,
     lowercase: true,
-    // @ts-ignore
     validate: (value) => {
       if (!validator.isEmail(value)) {
         throw new Error('Invalid Email address');
       }
+      return true;
     },
   },
   password: {
@@ -40,8 +42,7 @@ const userSchema = new Schema({
   role: String,
 });
 
-// eslint-disable-next-line func-names
-userSchema.pre('save', async function (next) {
+userSchema.pre('save', async function (this: IUser, next) {
   // Hash the password before saving the user model
   if (this.isModified('password')) {
     log.verbose('Hashing password');
@@ -50,7 +51,7 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-const Model = model('User', userSchema);
+const Model = model<IUser>('User', userSchema);
 
 class User extends Model {
   static async findByCredentials(email, password) {
@@ -59,7 +60,6 @@ class User extends Model {
     if (!user) {
       throw new Error(`User with email '${email}' not found`);
     }
-    // @ts-ignore
     const isPasswordMatch = await bcrypt.compare(password, user.password);
     if (!isPasswordMatch) {
       throw new Error('Invalid login credentials');
