@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { mergeSchemas, makeExecutableSchema } from 'graphql-tools';
+import { Config } from 'apollo-server-koa';
 import getWinstonLogger from './utils/logger';
 
 log.verbose('Initiate building and merging GraphQL schemas');
@@ -35,8 +36,7 @@ log.verbose('GraphQL schemas compiled');
 
 const fileLogger = getWinstonLogger({ label: 'GQL', onlyFile: 'queries.log' });
 
-/** @type {import('apollo-server-koa').Config["plugins"]} */
-const plugins = [
+const plugins: Config['plugins'] = [
   {
     requestDidStart: ({ request }) => {
       if (request.operationName) return {};

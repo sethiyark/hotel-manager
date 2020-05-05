@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
 import config from 'config';
-import { AuthenticationError } from 'apollo-server-koa';
+import { AuthenticationError, Config } from 'apollo-server-koa';
 import { User } from '../models/User';
 
 const JWT_KEY = _.get(config, ['auth', 'jwtKey'], null);
 
-const updateAuthContext = async (ctx) => {
+const updateAuthContext: Config['context'] = async (ctx) => {
   let token = _.get(ctx, ['ctx', 'request', 'header', 'authorization'], null);
 
   // We return context without modification in case of login and signup mutations
