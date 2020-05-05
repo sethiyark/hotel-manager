@@ -4,8 +4,6 @@ import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-import { User as IUser } from '../../../typings/models/User';
-
 const JWT_KEY = _.get(config, ['auth', 'jwtKey'], null);
 
 const userSchema = new Schema({

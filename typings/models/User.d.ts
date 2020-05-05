@@ -1,15 +1,17 @@
 import { Document } from 'mongoose';
 
-export interface User extends Document {
-  name: string;
+declare global {
+  interface IUser extends Document {
+    name: string;
 
-  email: string;
+    email: string;
 
-  password: string;
+    password: string;
 
-  tokens: {
-    token: string;
-  }[];
+    tokens: {
+      token: string;
+    }[];
 
-  role: string;
+    role: string;
+  }
 }

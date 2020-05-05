@@ -1,23 +1,25 @@
 import { Document } from 'mongoose';
 
-export interface Customer extends Document {
-  name: string;
+declare global {
+  interface ICustomer extends Document {
+    name: string;
 
-  age: string;
+    age: string;
 
-  address: string;
+    address: string;
 
-  checkinId: number;
+    checkinId: number;
 
-  idProofs: {
-    idType: string;
-    scans: {
-      imgUrl: string;
+    idProofs: {
+      idType: string;
+      scans: {
+        imgUrl: string;
+      }[];
     }[];
-  }[];
 
-  contact: {
-    mobile: string;
-    email: string;
-  };
+    contact: {
+      mobile: string;
+      email: string;
+    };
+  }
 }

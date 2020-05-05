@@ -1,5 +1,4 @@
 import { Schema, model } from 'mongoose';
-import { Customer as ICustomer } from '../../../typings/models/Customer';
 
 const customerSchema = new Schema({
   name: String,
