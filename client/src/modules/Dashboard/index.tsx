@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import { Grid } from 'semantic-ui-react';
 import { map } from 'lodash';
 
@@ -19,7 +19,7 @@ const config = [
   [21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 201, 202],
 ];
 
-class Dashboard extends PureComponent {
+class Dashboard extends React.PureComponent {
   renderRow = (room, index) => {
     const textAlign = index % 2 ? 'left' : 'right';
     return (
@@ -29,7 +29,7 @@ class Dashboard extends PureComponent {
           size={60}
           config={commonRoomConfig}
           roomNo={roomNo}
-          mirror={index % 2}
+          mirror={!!(index % 2)}
         />
       </Grid.Column>
     );
@@ -42,6 +42,7 @@ class Dashboard extends PureComponent {
       </Grid>
     </Grid.Column>
   );
+
   render() {
     return (
       <Grid

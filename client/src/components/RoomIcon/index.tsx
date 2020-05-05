@@ -1,15 +1,32 @@
-import React, { PureComponent } from 'react';
+import * as React from 'react';
 import _ from 'lodash';
 import cx from 'classnames';
 
 import './styles/RoomIcon.scss';
 
-class RoomIcon extends PureComponent {
+interface RoomIconProps {
+  size?: number;
+  color?: string;
+  config?: {
+    airConditioned: boolean;
+    western: boolean;
+    priorityCleaned: string;
+  };
+  roomNo: string;
+  mirror?: boolean;
+  className?: string;
+}
+
+class RoomIcon extends React.PureComponent<RoomIconProps> {
   render() {
     const {
       size = 200,
       color = '#f5f5f5',
-      config = {},
+      config = {
+        airConditioned: false,
+        western: false,
+        priorityCleaned: '',
+      },
       roomNo,
       mirror = false,
       className: classExtend,

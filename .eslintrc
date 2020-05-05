@@ -70,5 +70,6 @@
         "mjs": "never"
       }
     ]
-  }
+  },
+  "ignorePatterns": ["webpack.config.js"]
 }

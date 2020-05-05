@@ -5,7 +5,7 @@ module.exports = () => {
   const mode = process.env.NODE_ENV || 'development';
 
   return {
-    entry: path.resolve(__dirname, 'res/js/index.js'),
+    entry: path.resolve(__dirname, 'client/src/index.tsx'),
     output: {
       path: path.resolve(__dirname, 'dist/static'),
       filename: 'index_bundle.js',
@@ -14,6 +14,20 @@ module.exports = () => {
       rules: [
         { test: /\.(js)$/, use: 'babel-loader' },
         { test: /\.css$/, use: ['style-loader', 'css-loader'] },
+        {
+          test: /\.ts(x)?$/,
+          use: [
+            {
+              loader: 'ts-loader',
+            },
+          ],
+          exclude: /node_modules/,
+        },
+        {
+          enforce: 'pre',
+          test: /\.js$/,
+          loader: 'source-map-loader',
+        },
         {
           test: /\.s[ac]ss$/i,
           use: ['style-loader', 'css-loader', 'sass-loader'],
@@ -54,9 +68,12 @@ module.exports = () => {
       hot: true,
       historyApiFallback: true,
     },
+    resolve: {
+      extensions: ['.js', '.jsx', '.tsx', '.ts'],
+    },
     plugins: [
       new HtmlWebpackPlugin({
-        template: 'res/public/index.html',
+        template: 'client/public/index.html',
       }),
     ],
   };

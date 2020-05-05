@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import loadable from '@loadable/component';
 import { Loader } from 'semantic-ui-react';
 

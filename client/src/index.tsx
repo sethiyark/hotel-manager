@@ -1,12 +1,14 @@
-import React from 'react';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { render } from 'react-dom';
+import * as React from 'react';
+import * as ReactRouter from 'react-router-dom';
+import * as ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import { map } from 'lodash';
 import 'semantic-ui-css/semantic.min.css';
 
 import routes from './routes';
+
+const { BrowserRouter, Switch, Route } = ReactRouter;
 
 const client = new ApolloClient({
   uri: 'http://localhost:3001/api',
@@ -24,7 +26,7 @@ class App extends React.Component {
   }
 }
 
-render(
+ReactDOM.render(
   <ApolloProvider client={client}>
     <BrowserRouter>
       <App />
