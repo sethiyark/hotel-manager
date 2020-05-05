@@ -1,8 +1,21 @@
 import { User } from '..';
+import { checkAuth } from '../../utils/auth';
 
 export default {
+  Query: {
+    users: async (root, args, context) => {
+      try {
+        await checkAuth(context);
+      } catch (e) {
+        log.error(`Unauthorized request to access query: Users. ${e.message}`);
+        return e;
+      }
+      return User.find({});
+    },
+  },
+
   Mutation: {
-    SignupMutation: async (root, args) => {
+    signup: async (root, args) => {
       const user = new User({
         name: args.name,
         email: args.email,
@@ -32,7 +45,7 @@ export default {
       };
     },
 
-    LoginMutation: async (root, args) => {
+    login: async (root, args) => {
       const { email, password } = args;
 
       try {
