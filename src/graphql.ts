@@ -17,7 +17,7 @@ const subschemas = _.map(allModels, (model) => {
 
     const typeDefs = fs.readFileSync(typeDefPath, { encoding: 'utf-8' });
 
-    // eslint-disable-next-line import/no-dynamic-require, global-require
+    // eslint-disable-next-line import/no-dynamic-require, global-require, @typescript-eslint/no-var-requires
     const required = require(resolverPath);
     const resolvers = required.default || required;
 

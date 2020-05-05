@@ -27,7 +27,6 @@ const updateAuthContext = async (ctx) => {
     ctx.authToken = token;
   } catch (error) {
     return new AuthenticationError(
-      // eslint-disable-next-line comma-dangle
       `Not authorized to access this resource. ${error.message}`
     );
   }
