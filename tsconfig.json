@@ -4,16 +4,14 @@
     "module": "commonjs",
     "noEmit": true,
     "esModuleInterop": true,
-    "noImplicitAny": false,
+    "noImplicitAny": false
   },
-  "include": [
-    "src/**/*",
-    "typings/**/*",
-  ],
+  "include": ["src/**/*", "typings/**/*"],
   "exclude": [
     "node_modules/**/*",
     "dist/**/*",
     ".git",
-    "webpack.config.js"
-  ],
+    "webpack.config.js",
+    "buildGQLTypes.ts"
+  ]
 }

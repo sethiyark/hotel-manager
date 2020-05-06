@@ -71,5 +71,5 @@
       }
     ]
   },
-  "ignorePatterns": ["webpack.config.js"]
+  "ignorePatterns": ["webpack.config.js", "buildGQLTypes.ts"]
 }

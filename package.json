@@ -14,7 +14,8 @@
     "build": "babel-changed",
     "build:app": "webpack",
     "start:app": "webpack-dev-server --open",
-    "tsc": "tsc"
+    "tsc": "tsc",
+    "build:types": "babel-node buildGQLTypes --extensions '.ts'"
   },
   "dependencies": {
     "@apollo/react-hooks": "^3.1.5",
@@ -28,7 +29,7 @@
     "chalk": "^4.0.0",
     "classnames": "^2.2.6",
     "config": "^3.3.1",
-    "graphql": "^15.0.0",
+    "graphql": "^14.6.0",
     "graphql-tools": "^5.0.0",
     "handlebars": "^4.7.6",
     "json-colorizer": "^2.2.2",
@@ -86,6 +87,7 @@
     "eslint-plugin-react": "^7.19.0",
     "eslint-plugin-react-hooks": "^3.0.0",
     "file-loader": "^6.0.0",
+    "graphql-schema-typescript": "^1.3.2",
     "html-webpack-plugin": "^4.2.0",
     "nodemon": "^2.0.3",
     "prettier": "^2.0.5",

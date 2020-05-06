@@ -2,7 +2,6 @@
 import lodash from 'lodash';
 import bluebird from 'bluebird';
 import config from 'config';
-import connectDB from './mongoose';
 import getWinstonLogger from './utils/logger';
 
 global.Promise.map = bluebird.map.bind(bluebird);
@@ -19,6 +18,3 @@ global.cfg = (setting, fallback = null) => {
     return fallback;
   }
 };
-
-// Establish DB connection. Should be invoked only once.
-connectDB();

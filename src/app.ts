@@ -9,6 +9,7 @@ import { ApolloServer } from 'apollo-server-koa';
 import mongoose from 'mongoose';
 
 import './global';
+import './mongoose';
 import { schema, plugins } from './graphql';
 import { updateAuthContext } from './utils/auth';
 
