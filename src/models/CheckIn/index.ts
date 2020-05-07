@@ -1,7 +1,7 @@
 import { Schema, model } from 'mongoose';
 
 const checkInSchema = new Schema({
-  customerId: Number,
+  customerId: Schema.Types.ObjectId,
 
   inTime: String,
 
@@ -11,7 +11,7 @@ const checkInSchema = new Schema({
 
   roomIds: [{ type: Number }],
 
-  billId: Number,
+  billId: Schema.Types.ObjectId,
 
   state: String, // [occupied/maintenance/cleaning/booked]
 

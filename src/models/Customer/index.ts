@@ -7,7 +7,7 @@ const customerSchema = new Schema({
 
   address: String,
 
-  checkinId: Number,
+  checkinId: Schema.Types.ObjectId,
 
   idProofs: [
     {
