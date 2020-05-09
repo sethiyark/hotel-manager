@@ -2,11 +2,18 @@ import { Schema, model } from 'mongoose';
 
 const roomSchema = new Schema({
   displayName: String,
-
+  floor: Number,
   config: {
-    western: Boolean,
-    airConditioned: Boolean,
-    priorityCleaned: Boolean, // user_id
+    type: {
+      western: Boolean,
+      airConditioned: Boolean,
+      priorityCleaned: Number,
+    },
+    default: {
+      western: false,
+      airConditioned: false,
+      priorityCleaned: -1,
+    },
   },
 });
 

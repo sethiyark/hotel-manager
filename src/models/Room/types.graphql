@@ -1,7 +1,28 @@
+type RoomConfig {
+  western: Boolean
+  airConditioned: Boolean
+  priorityCleaned: Int 
+}
+
 type Room {
   displayName: String
+  floor: Int
+  config: RoomConfig
 }
 
 type Query {
-  rooms: [Room]
+  rooms: [[Room]]
+}
+input RoomConfigInput {
+  western: Boolean
+  airConditioned: Boolean
+  priorityCleaned: Int 
+}
+
+type Mutation {
+  addRoom(
+    displayName: String!,
+    floor: Int!,
+    config: RoomConfigInput
+  ): Room
 }
