@@ -1,62 +1,48 @@
 import * as React from 'react';
-import { Grid } from 'semantic-ui-react';
-import { map } from 'lodash';
+import { Grid, Loader } from 'semantic-ui-react';
+import { map, get } from 'lodash';
+import { useQuery } from '@apollo/react-hooks';
 
 import { RoomIcon } from '../../components';
+import { GET_ROOMS } from '../../api';
 
 import './styles/Dashboard.scss';
 
-const roomNo = '303';
-const commonRoomConfig = {
-  western: true,
-  airConditioned: true,
-  priorityCleaned: '2',
-};
+const Dashboard = () => {
+  const { loading, data } = useQuery(GET_ROOMS);
 
-const config = [
-  [1, 2, 3, 4, 5, 6, 7, 8, 9, 0],
-  [11, 12, 13, 14, 15, 16, 17, 18, 19, 10, 101, 102],
-  [21, 22, 23, 24, 25, 26, 27, 28, 29, 20, 201, 202],
-];
+  if (loading) return <Loader active />;
+  const rooms = get(data, 'rooms', []);
 
-class Dashboard extends React.PureComponent {
-  renderRow = (room, index) => {
+  const renderRow = (room, index) => {
     const textAlign = index % 2 ? 'left' : 'right';
+    const { displayName, config } = room;
     return (
-      <Grid.Column key={room} textAlign={textAlign}>
+      <Grid.Column key={index} textAlign={textAlign}>
         <RoomIcon
           className="room-item"
           size={60}
-          config={commonRoomConfig}
-          roomNo={roomNo}
+          config={config}
+          roomNo={displayName}
           mirror={!!(index % 2)}
         />
       </Grid.Column>
     );
   };
 
-  renderCol = (rows, index) => (
+  const renderCol = (rows, index) => (
     <Grid.Column key={index}>
       <Grid container centered relaxed columns={2}>
-        {map(rows, this.renderRow)}
+        {map(rows, renderRow)}
       </Grid>
     </Grid.Column>
   );
 
-  render() {
-    return (
-      <Grid
-        container
-        centered
-        relaxed
-        doubling
-        columns={3}
-        className="dashboard"
-      >
-        {map(config, this.renderCol)}
-      </Grid>
-    );
-  }
-}
+  return (
+    <Grid container centered relaxed doubling columns={3} className="dashboard">
+      {map(rooms, renderCol)}
+    </Grid>
+  );
+};
 
 export default Dashboard;
