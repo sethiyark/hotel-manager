@@ -10,7 +10,7 @@ interface RoomIconProps {
   config?: {
     airConditioned: boolean;
     western: boolean;
-    priorityCleaned: string;
+    priorityCleaned: number;
   };
   roomNo: string;
   mirror?: boolean;
@@ -25,7 +25,7 @@ class RoomIcon extends React.PureComponent<RoomIconProps> {
       config = {
         airConditioned: false,
         western: false,
-        priorityCleaned: '',
+        priorityCleaned: NaN,
       },
       roomNo,
       mirror = false,
@@ -74,7 +74,7 @@ class RoomIcon extends React.PureComponent<RoomIconProps> {
           </span>
         </span>
 
-        {!_.isEmpty(config.priorityCleaned) ? (
+        {config.priorityCleaned ? (
           <span
             className="room-block__priority-cleaning"
             style={{
