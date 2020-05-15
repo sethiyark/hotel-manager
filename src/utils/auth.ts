@@ -5,41 +5,34 @@ import { User } from '../models/User';
 
 const JWT_KEY = _.get(config, ['auth', 'jwtKey'], null);
 
-const updateAuthContext: Config['context'] = async (ctx) => {
+const auth: Config['context'] = async (ctx, next) => {
   let token = _.get(ctx, ['ctx', 'request', 'header', 'authorization'], null);
 
-  // We return context without modification in case of login and signup mutations
   if (_.isEmpty(token)) {
-    return ctx;
-  }
-
-  token = token.replace('Bearer ', '');
-
-  try {
-    const data = jwt.verify(token, JWT_KEY);
-    const user = await User.findOne({ _id: data._id, 'tokens.token': token });
-
-    if (_.isEmpty(user)) {
-      return new Error('Token expired.');
-    }
-
-    ctx.user = user;
-    ctx.authToken = token;
-  } catch (error) {
-    return new AuthenticationError(
-      `Not authorized to access this resource. ${error.message}`
+    throw new AuthenticationError(
+      'User is not authorized to access this resource'
     );
-  }
+  } else {
+    token = token.replace('Bearer ', '');
+    try {
+      const data = jwt.verify(token, JWT_KEY);
+      const user = await User.findOne({ _id: data._id, 'tokens.token': token });
 
-  return ctx;
+      if (_.isEmpty(user)) {
+        return new Error('Token expired.');
+      }
+
+      ctx.user = user;
+      ctx.authToken = token;
+      return next();
+    } catch (error) {
+      throw new AuthenticationError(
+        `Error in token validation: ${error.message}`
+      );
+    }
+  }
 };
 
-async function checkAuth(ctx) {
-  if (_.isEmpty(ctx.user)) {
-    throw new AuthenticationError('User is not authenticated');
-  }
-}
+export default auth;
 
-export default updateAuthContext;
-
-export { updateAuthContext, checkAuth };
+export { auth };

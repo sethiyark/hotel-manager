@@ -13,5 +13,7 @@ declare global {
     }[];
 
     role: string;
+
+    generateAuthToken(): any;
   }
 }

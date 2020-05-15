@@ -1,5 +1,4 @@
 import Koa from 'koa';
-import Router from 'koa-router';
 import koaBody from 'koa-bodyparser';
 import cors from '@koa/cors';
 import serve from 'koa-static';
@@ -11,10 +10,13 @@ import mongoose from 'mongoose';
 import './global';
 import './mongoose';
 import { schema, plugins } from './graphql';
-import { updateAuthContext } from './utils/auth';
+import { auth } from './utils/auth';
+
+import registrationRouter from './routers/registration';
+import loginRouter from './routers/login';
+import indexRouter from './routers';
 
 const app = new Koa();
-const router = new Router();
 
 // koaBody is needed just for POST.
 app.use(koaBody());
@@ -32,20 +34,22 @@ app.use(
   })
 );
 app.use(serve(clientStatic));
-router.get('/*', async (ctx, next) => {
-  await ctx.render('index');
-  return next();
-});
 
 const apolloServer = new ApolloServer({
   schema,
   plugins,
-  context: updateAuthContext,
+  context: auth,
 });
 apolloServer.applyMiddleware({ app, path: '/api' });
 
-app.use(router.routes());
-app.use(router.allowedMethods());
+app.use(registrationRouter.routes());
+app.use(registrationRouter.allowedMethods());
+
+app.use(loginRouter.routes());
+app.use(loginRouter.allowedMethods());
+
+app.use(indexRouter.routes());
+app.use(indexRouter.allowedMethods());
 
 log.info('Starting Koa server');
 
