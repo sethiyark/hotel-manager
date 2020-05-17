@@ -1,0 +1,115 @@
+.checkin {
+  &.ui.container {
+    margin: 48px;
+  }
+  .header {
+    border-bottom: 1px solid lightgray;
+
+    .identification {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-evenly;
+      margin: 8px;
+    }
+
+    .customer-info {
+      .input {
+        margin-bottom: 4px;
+        width: 100%;
+
+        .label {
+          width: unset;
+          margin: unset;
+        }
+
+        input {
+          width: 0;
+        }
+      }
+
+      .address {
+        .label {
+          width: 100%;
+          border-radius: 0.28571429rem 0.28571429rem 0 0;
+        }
+        textarea {
+          width: 100%;
+          border: 1px solid rgba(34, 36, 38, 0.15);
+        }
+      }
+    }
+
+    .customer {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        display: block;
+        margin: 0px auto 16px;
+      }
+    }
+
+    .time {
+      display: flex !important;
+      flex-direction: column;
+      justify-content: flex-end;
+
+      .label {
+        width: 100%;
+        margin: 2px 0;
+      }
+
+      .person-count {
+        margin-top: 2px;
+        width: 100%;
+
+        .label {
+          width: unset;
+          margin: unset;
+        }
+
+        input {
+          width: 0;
+        }
+      }
+    }
+  }
+
+  .details {
+    border-right: 1px solid lightgray;
+
+    .payment {
+      padding-bottom: 12px;
+
+      .input {
+        width: 100%;
+        margin-top: 6px;
+
+        &:first-child {
+          margin-top: unset;
+        }
+
+        input {
+          width: 0;
+        }
+      }
+
+      span {
+        margin-top: 6px;
+        display: flex;
+        justify-content: space-between;
+
+        .bill {
+          display: inline-flex;
+          align-items: center;
+
+          .checkbox {
+            margin-left: 8px;
+          }
+        }
+      }
+    }
+  }
+}

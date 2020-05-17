@@ -19,6 +19,13 @@ const routes = [
     }),
     exact: true,
   },
+  {
+    path: '/checkin',
+    component: loadable(() => import('./modules/CheckIn'), {
+      fallback: <Loading />,
+    }),
+    exact: true,
+  },
 ];
 
 export default routes;
