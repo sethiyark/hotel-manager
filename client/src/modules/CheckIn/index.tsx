@@ -107,12 +107,12 @@ const CheckIn = () => {
                 <Label pointing="right">Bill</Label>
                 <Radio toggle />
               </div>
-              <Button primary>Primary</Button>
+              <Button primary>Submit</Button>
             </span>
           </div>
         </Grid.Column>
         <Grid.Column>
-          <Label attached="bottom right">Signature</Label>
+          <Label attached="bottom right">Customer Signature</Label>
         </Grid.Column>
       </Grid.Row>
     </Grid>
