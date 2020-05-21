@@ -1,0 +1,409 @@
+[{
+  "_id": {
+    "$oid": "5eb415135cef8a40eb7cda4d"
+  },
+  "displayName": "101",
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416453f67d243a5a987e4"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "102",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416483f67d243a5a987e5"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "103",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb4164a3f67d243a5a987e6"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "104",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb4164d3f67d243a5a987e7"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "105",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416503f67d243a5a987e8"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "106",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416523f67d243a5a987e9"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "107",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416553f67d243a5a987ea"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "108",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416573f67d243a5a987eb"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "109",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb4165a3f67d243a5a987ec"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 1
+  },
+  "displayName": "110",
+  "floor": 1,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416883f67d243a5a987ed"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "201",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb4168c3f67d243a5a987ee"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "202",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb4168e3f67d243a5a987ef"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "203",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416903f67d243a5a987f0"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "204",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416963f67d243a5a987f1"
+  },
+  "config": {
+    "western": false,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "205",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416993f67d243a5a987f2"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "206",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb4169c3f67d243a5a987f3"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "207",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb4169e3f67d243a5a987f4"
+  },
+  "config": {
+    "western": false,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "208",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416a23f67d243a5a987f5"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "209",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416a63f67d243a5a987f6"
+  },
+  "config": {
+    "western": false,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "210",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416a73f67d243a5a987f7"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "211",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416ac3f67d243a5a987f8"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": false,
+    "priorityCleaned": 1
+  },
+  "displayName": "212",
+  "floor": 2,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416c63f67d243a5a987f9"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "301",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416c83f67d243a5a987fa"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "302",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416ca3f67d243a5a987fb"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "303",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416cb3f67d243a5a987fc"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "304",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416cc3f67d243a5a987fd"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "305",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416ce3f67d243a5a987fe"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "306",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416d03f67d243a5a987ff"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "307",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416d23f67d243a5a98800"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "308",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416d33f67d243a5a98801"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "309",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416d63f67d243a5a98802"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "310",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416d83f67d243a5a98803"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "311",
+  "floor": 3,
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "5eb416d93f67d243a5a98804"
+  },
+  "config": {
+    "western": true,
+    "airConditioned": true,
+    "priorityCleaned": 2
+  },
+  "displayName": "312",
+  "floor": 3,
+  "__v": 0
+}]

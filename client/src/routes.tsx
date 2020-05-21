@@ -20,6 +20,13 @@ const routes = [
     exact: true,
   },
   {
+    path: '/checkin',
+    component: loadable(() => import('./modules/CheckIn'), {
+      fallback: <Loading />,
+    }),
+    exact: true,
+  },
+  {
     path: '/login',
     component: loadable(() => import('./modules/Login'), {
       fallback: <Loading />,

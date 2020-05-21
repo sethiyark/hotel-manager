@@ -48,7 +48,8 @@
     "react/jsx-filename-extension": [
       1,
       { "extensions": [".js", ".jsx", ".ts", ".tsx"] }
-    ]
+    ],
+    "react/jsx-wrap-multilines": 0
   },
   "settings": {
     "import/resolver": {
