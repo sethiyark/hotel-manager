@@ -1,13 +1,14 @@
 import Router from 'koa-router';
 import { User } from '../models/User';
 
+const BASE_API_URL = '/api/v1';
 const router = new Router();
 
-router.post('/registration', async (ctx) => {
+router.post(`${BASE_API_URL}/registration`, async (ctx) => {
   try {
-    const user = new User(ctx.request.body);
+    const { name, email, password } = ctx.request.body;
+    const user = new User({ name, email, password });
     await user.save();
-    const token = await user.generateAuthToken();
     ctx.status = 201;
     ctx.body = {
       status: 'success',
@@ -17,7 +18,6 @@ router.post('/registration', async (ctx) => {
         role: user.role,
         id: user.id,
       },
-      token,
     };
   } catch (error) {
     ctx.status = 400;

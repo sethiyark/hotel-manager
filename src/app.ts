@@ -12,8 +12,8 @@ import './mongoose';
 import { schema, plugins } from './graphql';
 import { auth } from './utils/auth';
 
-import registrationRouter from './routers/registration';
 import loginRouter from './routers/login';
+import registrationRouter from './routers/registration';
 import indexRouter from './routers';
 
 const app = new Koa();

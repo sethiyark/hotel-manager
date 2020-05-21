@@ -1,10 +1,13 @@
-import { Schema, model } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import config from 'config';
 import validator from 'validator';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
-const JWT_KEY = _.get(config, ['auth', 'jwtKey'], null);
+const JWT_KEY = _.get(config, 'auth.access_token_secret', null);
+const REFRESH_TOKEN_KEY = _.get(config, 'auth.refresh_token_secret', null);
+const ACCESS_TOKEN_LIFE = _.get(config, 'auth.access_token_life', null);
+const REFRESH_TOKEN_LIFE = _.get(config, 'auth.refresh_token_life', null);
 
 const userSchema = new Schema({
   name: {
@@ -37,7 +40,11 @@ const userSchema = new Schema({
       },
     },
   ],
-  role: String,
+  role: {
+    type: String,
+    enum: ['admin', 'standard'],
+    default: 'standard',
+  },
 });
 
 userSchema.pre('save', async function (this: IUser, next) {
@@ -53,7 +60,6 @@ const Model = model<IUser>('User', userSchema);
 
 class User extends Model {
   static async findByCredentials(email, password) {
-    // Search for a user by email and password.
     const user = await User.findOne({ email });
     if (!user) {
       throw new Error(`User with email '${email}' not found`);
@@ -69,7 +75,9 @@ class User extends Model {
     if (_.isEmpty(JWT_KEY)) {
       throw new Error('Invalid JWT key');
     }
-    const token = jwt.sign({ _id: this._id }, JWT_KEY);
+    const token = jwt.sign({ _id: this._id }, JWT_KEY, {
+      expiresIn: ACCESS_TOKEN_LIFE,
+    });
     this.tokens = this.tokens.concat({ token });
     try {
       await this.save();
@@ -77,6 +85,15 @@ class User extends Model {
       throw new Error(`Error while generating JWT token: ${e.message}`);
     }
     return token;
+  }
+
+  async generateRefreshToken() {
+    if (_.isEmpty(REFRESH_TOKEN_KEY)) {
+      throw new Error('Invalid refresh token key');
+    }
+    return jwt.sign({ _id: this._id }, REFRESH_TOKEN_KEY, {
+      expiresIn: REFRESH_TOKEN_LIFE,
+    });
   }
 }
 

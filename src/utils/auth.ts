@@ -3,7 +3,7 @@ import config from 'config';
 import { AuthenticationError, Config } from 'apollo-server-koa';
 import { User } from '../models/User';
 
-const JWT_KEY = _.get(config, ['auth', 'jwtKey'], null);
+const JWT_KEY = _.get(config, 'auth.access_token_secret', null);
 
 const auth: Config['context'] = async (ctx, next) => {
   let token = _.get(ctx, ['ctx', 'request', 'header', 'authorization'], null);
@@ -24,7 +24,7 @@ const auth: Config['context'] = async (ctx, next) => {
 
       ctx.user = user;
       ctx.authToken = token;
-      return next();
+      return next;
     } catch (error) {
       throw new AuthenticationError(
         `Error in token validation: ${error.message}`

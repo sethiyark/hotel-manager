@@ -15,5 +15,7 @@ declare global {
     role: string;
 
     generateAuthToken(): any;
+
+    generateRefreshToken(): any;
   }
 }

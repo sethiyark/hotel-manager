@@ -19,6 +19,20 @@ const routes = [
     }),
     exact: true,
   },
+  {
+    path: '/login',
+    component: loadable(() => import('./modules/Login'), {
+      fallback: <Loading />,
+    }),
+    exact: true,
+  },
+  {
+    path: '/registration',
+    component: loadable(() => import('./modules/Registration'), {
+      fallback: <Loading />,
+    }),
+    exact: true,
+  },
 ];
 
 export default routes;
