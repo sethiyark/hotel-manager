@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react';
 import { useEffect } from 'react';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 const LOGIN_API_URL = 'http://localhost:3001/api/v1/login';
 
@@ -172,6 +173,10 @@ const LoginForm = ({ setClient }) => {
       </Grid.Column>
     </Grid>
   );
+};
+
+LoginForm.propTypes = {
+  setClient: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
