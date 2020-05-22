@@ -11,11 +11,33 @@ import {
   Radio,
   Button,
 } from 'semantic-ui-react';
+import SignatureCanvas from 'react-signature-canvas';
 
 import './styles/CheckIn.scss';
 
 const CheckIn = () => {
   const today = moment();
+  let signatureRef;
+  const [canvasSize, updateCanvasSize] = React.useState({
+    width: 100,
+    height: 100,
+  });
+  const [signature, setSignature] = React.useState();
+  const setCanvasSize = () => {
+    const canvasWrapper = document.getElementById('canvas-wrapper');
+    updateCanvasSize({
+      width: canvasWrapper.offsetWidth - 22,
+      height: canvasWrapper.offsetHeight - 22,
+    });
+  };
+  setTimeout(setCanvasSize, 0);
+
+  React.useEffect(() => {
+    window.addEventListener('resize', setCanvasSize);
+    return () => {
+      window.removeEventListener('resize', setCanvasSize);
+    };
+  });
 
   return (
     <Grid as={Segment} container centered relaxed className="checkin">
@@ -111,7 +133,20 @@ const CheckIn = () => {
             </span>
           </div>
         </Grid.Column>
-        <Grid.Column>
+        <Grid.Column id="canvas-wrapper">
+          <SignatureCanvas
+            ref={(ref) => {
+              signatureRef = ref;
+            }}
+            canvasProps={{
+              width: canvasSize.width,
+              height: canvasSize.height,
+              className: 'sigCanvas',
+            }}
+            onEnd={() => {
+              setSignature(signatureRef.toDataURL());
+            }}
+          />
           <Label attached="bottom right">Customer Signature</Label>
         </Grid.Column>
       </Grid.Row>
