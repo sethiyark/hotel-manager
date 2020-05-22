@@ -22,7 +22,7 @@ const LoginForm = ({ setClient }) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isLoginSucessful, setIsLoginSuccesful] = React.useState(false);
+  const [isLoginSuccessful, setIsLoginSuccessful] = React.useState(false);
 
   const [emailError, setEmailError] = React.useState(null);
   const [passwordError, setPasswordError] = React.useState(null);
@@ -62,7 +62,7 @@ const LoginForm = ({ setClient }) => {
             _.has(data, 'token.refreshToken') &&
             _.has(data, 'token.accessToken')
           ) {
-            setIsLoginSuccesful(true);
+            setIsLoginSuccessful(true);
             cookies.set('refreshToken', `${data.token.refreshToken}`);
             cookies.set('userId', `${data.user.id}`);
             setClient(data.token.accessToken);
@@ -81,7 +81,7 @@ const LoginForm = ({ setClient }) => {
         setPassword('');
       })
       .then(() => {
-        if (isLoginSucessful) {
+        if (isLoginSuccessful) {
           history.push('/dashboard');
         }
       });
@@ -96,7 +96,7 @@ const LoginForm = ({ setClient }) => {
     passwordError,
     email,
     password,
-    isLoginSucessful,
+    isLoginSuccessful,
     isSubmitting,
   ]);
 
