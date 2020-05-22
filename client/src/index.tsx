@@ -5,7 +5,9 @@ import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import _, { map } from 'lodash';
 import Cookies from 'universal-cookie';
-import routes from './routes';
+import { Loader } from 'semantic-ui-react';
+
+import getRouteConfig from './routes';
 import history from './utils/history';
 import 'semantic-ui-css/semantic.min.css';
 
@@ -18,30 +20,61 @@ const cookies = new Cookies();
 
 const REFRESH_TOKEN_API_URL = 'http://localhost:3001/api/v1/refresh_token';
 
-function redirectToLogin() {
-  history.push('/login');
-}
-
-class App extends React.Component<{}, { client }> {
+class App extends React.Component<
+  {},
+  { client: ApolloClient<unknown>; loading: boolean }
+> {
   constructor(props) {
     super(props);
     this.state = {
       client: new ApolloClient({
         uri: 'http://localhost:3001/api',
       }),
+      loading: true,
     };
+  }
+
+  componentDidMount() {
     this.refreshAccessToken();
   }
+
+  isLoginRoute = () => {
+    return ['/login', '/registration'].includes(window.location.pathname);
+  };
+
+  redirectToLogin = () => {
+    history.push('/login');
+    this.setState({ loading: false });
+  };
+
+  getApolloClient = (accessToken) =>
+    new ApolloClient({
+      uri: 'http://localhost:3001/api',
+      request: (operation) => {
+        operation.setContext({
+          headers: {
+            authorization: `Bearer ${accessToken}`,
+          },
+        });
+      },
+    });
+
+  setClient = (accessToken) =>
+    this.setState(
+      {
+        client: this.getApolloClient(accessToken),
+      },
+      () => this.setState({ loading: false })
+    );
 
   getRoute = (route, key) => <Route key={key} {...route} />;
 
   refreshAccessToken = () => {
     const refreshToken = cookies.get('refreshToken');
     const userId = cookies.get('userId');
+    const isLoginRoute = this.isLoginRoute();
 
-    let accessToken = '';
-
-    if (!(refreshToken && window['userId'])) {
+    if (refreshToken && userId) {
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -55,27 +88,32 @@ class App extends React.Component<{}, { client }> {
         .then((response) => response.json())
         .then((data) => {
           if (_.has(data, 'accessToken')) {
-            accessToken = data.accessToken;
-            const client = new ApolloClient({
-              uri: 'http://localhost:3001/api',
-              request: (operation) => {
-                operation.setContext({
-                  headers: {
-                    authorization: `Bearer ${accessToken}`,
-                  },
-                });
-              },
-            });
-            this.setState({ client });
-          } else {
-            redirectToLogin();
+            window['accessToken'] = data.accessToken;
+            this.setClient(data.accessToken);
+            if (isLoginRoute) {
+              history.push('/');
+            }
+          } else if (!isLoginRoute) {
+            this.redirectToLogin();
           }
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+          this.redirectToLogin();
         });
+    } else if (!isLoginRoute) {
+      this.redirectToLogin();
+    } else {
+      this.setState({ loading: false });
     }
   };
 
   render() {
-    const { client } = this.state;
+    const { client, loading } = this.state;
+    if (loading) return <Loader active />;
+
+    const routes = getRouteConfig({ setClient: this.setClient });
     return (
       <ApolloProvider client={client}>
         <main id="main">

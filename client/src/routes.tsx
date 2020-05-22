@@ -2,44 +2,39 @@ import * as React from 'react';
 import loadable from '@loadable/component';
 import { Loader } from 'semantic-ui-react';
 
-const Loading = () => <Loader active />;
+import Login from './modules/Login';
+import Registration from './modules/Registration';
 
-const routes = [
-  {
-    path: '/',
-    component: loadable(() => import('./modules/Home'), {
-      fallback: <Loading />,
-    }),
-    exact: true,
-  },
-  {
-    path: '/dashboard',
-    component: loadable(() => import('./modules/Dashboard'), {
-      fallback: <Loading />,
-    }),
-    exact: true,
-  },
-  {
-    path: '/checkin',
-    component: loadable(() => import('./modules/CheckIn'), {
-      fallback: <Loading />,
-    }),
-    exact: true,
-  },
-  {
-    path: '/login',
-    component: loadable(() => import('./modules/Login'), {
-      fallback: <Loading />,
-    }),
-    exact: true,
-  },
-  {
-    path: '/registration',
-    component: loadable(() => import('./modules/Registration'), {
-      fallback: <Loading />,
-    }),
-    exact: true,
-  },
-];
+const fallbackOption = { fallback: <Loader active /> };
 
-export default routes;
+const getRouteConfig = ({ setClient }) => {
+  return [
+    {
+      path: '/',
+      component: loadable(() => import('./modules/Home'), fallbackOption),
+      exact: true,
+    },
+    {
+      path: '/dashboard',
+      component: loadable(() => import('./modules/Dashboard'), fallbackOption),
+      exact: true,
+    },
+    {
+      path: '/checkin',
+      component: loadable(() => import('./modules/CheckIn'), fallbackOption),
+      exact: true,
+    },
+    {
+      path: '/login',
+      render: () => <Login setClient={setClient} />,
+      exact: true,
+    },
+    {
+      path: '/registration',
+      render: () => <Registration />,
+      exact: true,
+    },
+  ];
+};
+
+export default getRouteConfig;

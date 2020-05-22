@@ -17,7 +17,7 @@ const LOGIN_API_URL = 'http://localhost:3001/api/v1/login';
 
 const cookies = new Cookies();
 
-const LoginForm = () => {
+const LoginForm = ({ setClient }) => {
   const history = useHistory();
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -65,7 +65,7 @@ const LoginForm = () => {
             setIsLoginSuccesful(true);
             cookies.set('refreshToken', `${data.token.refreshToken}`);
             cookies.set('userId', `${data.user.id}`);
-            window['accessToken'] = `${data.token.accessToken}`;
+            setClient(data.token.accessToken);
           } else {
             setLoginError(`Invalid token received`);
             setTimeout(() => setLoginError(null), 5000);
