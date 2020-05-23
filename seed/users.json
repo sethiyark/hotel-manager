@@ -2,7 +2,7 @@
   "_id": {
     "$oid": "5ec7d5c082963469c1d70d63"
   },
-  "role": "standard",
+  "role": "admin",
   "name": "Raunak Sethiya",
   "email": "sethiyark@gmail.com",
   "password": "$2b$08$lj7Ev5P36IxtV4SwGQCzzuJcqvQVs3xgESTN0jKXT7zlskf1n.zzW",
