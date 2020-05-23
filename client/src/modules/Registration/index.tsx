@@ -60,10 +60,10 @@ const LoginForm = () => {
   useEffect(() => {
     if (
       isSubmitting &&
-      _.isEmpty(userNameError) &&
-      _.isEmpty(emailError) &&
-      _.isEmpty(passwordError) &&
-      _.isEmpty(confirmPasswordError)
+      !userNameError &&
+      !emailError &&
+      !passwordError &&
+      !confirmPasswordError
     ) {
       const requestOptions = {
         method: 'POST',
@@ -80,10 +80,9 @@ const LoginForm = () => {
         .then((data) => {
           if (_.isEqual(data.status, 'success')) {
             setRegistrationSuccess(true);
-            setTimeout(() => setRegistrationSuccess(false), 5000);
           } else {
+            setIsSubmitting(false);
             setRegistrationError(`Server response: ${data.message}`);
-            setTimeout(() => setRegistrationError(null), 5000);
           }
         })
         .then(() => {
@@ -92,18 +91,14 @@ const LoginForm = () => {
           setPassword('');
           setConfirmPassword('');
           setUserName('');
+        })
+        .catch((err) => {
+          // eslint-disable-next-line no-console
+          console.error(err);
+          setIsSubmitting(false);
         });
     }
-  }, [
-    userNameError,
-    emailError,
-    passwordError,
-    confirmPasswordError,
-    userName,
-    email,
-    password,
-    isSubmitting,
-  ]);
+  }, [isSubmitting]);
 
   const onSubmit = () => {
     validateUserName();
@@ -114,24 +109,32 @@ const LoginForm = () => {
   };
 
   const onUserNameChange = (e, { value }) => {
+    if (registrationSuccess) setRegistrationSuccess(false);
+    if (registrationError) setRegistrationError('');
     if (userNameError) setUserNameError(null);
     if (isSubmitting) setIsSubmitting(false);
     setUserName(value);
   };
 
   const onEmailChange = (e, { value }) => {
+    if (registrationSuccess) setRegistrationSuccess(false);
+    if (registrationError) setRegistrationError('');
     if (emailError) setEmailError(null);
     if (isSubmitting) setIsSubmitting(false);
     setEmail(value);
   };
 
   const onPasswordChange = (e, { value }) => {
+    if (registrationSuccess) setRegistrationSuccess(false);
+    if (registrationError) setRegistrationError('');
     if (passwordError) setPasswordError(null);
     if (isSubmitting) setIsSubmitting(false);
     setPassword(value);
   };
 
   const onConfirmPasswordChange = (e, { value }) => {
+    if (registrationSuccess) setRegistrationSuccess(false);
+    if (registrationError) setRegistrationError('');
     if (_.isEqual(password, value)) setConfirmPasswordError(null);
     else setConfirmPasswordError("Passwords don't match");
     if (isSubmitting) setIsSubmitting(false);
@@ -151,7 +154,7 @@ const LoginForm = () => {
           content="You may now log-in with the username you have chosen"
         />
         <Message
-          hidden={_.isEmpty(registrationError)}
+          hidden={!registrationError}
           error
           header="Your user registration failed"
           content={registrationError}
@@ -166,10 +169,12 @@ const LoginForm = () => {
               onChange={onUserNameChange}
               value={userName}
               error={
-                userNameError && {
-                  content: userNameError,
-                  pointing: 'above',
-                }
+                userNameError
+                  ? {
+                      content: userNameError,
+                      pointing: 'above',
+                    }
+                  : null
               }
             />
             <Form.Input
@@ -180,10 +185,12 @@ const LoginForm = () => {
               onChange={onEmailChange}
               value={email}
               error={
-                emailError && {
-                  content: emailError,
-                  pointing: 'above',
-                }
+                emailError
+                  ? {
+                      content: emailError,
+                      pointing: 'above',
+                    }
+                  : null
               }
             />
             <Form.Input
@@ -195,10 +202,12 @@ const LoginForm = () => {
               onChange={onPasswordChange}
               value={password}
               error={
-                passwordError && {
-                  content: passwordError,
-                  pointing: 'above',
-                }
+                passwordError
+                  ? {
+                      content: passwordError,
+                      pointing: 'above',
+                    }
+                  : null
               }
             />
             <Form.Input
@@ -210,10 +219,12 @@ const LoginForm = () => {
               onChange={onConfirmPasswordChange}
               value={confirmPassword}
               error={
-                confirmPasswordError && {
-                  content: confirmPasswordError,
-                  pointing: 'above',
-                }
+                confirmPasswordError
+                  ? {
+                      content: confirmPasswordError,
+                      pointing: 'above',
+                    }
+                  : null
               }
             />
 

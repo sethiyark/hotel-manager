@@ -23,11 +23,10 @@ const LoginForm = ({ setClient }) => {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-  const [isLoginSuccessful, setIsLoginSuccessful] = React.useState(false);
 
-  const [emailError, setEmailError] = React.useState(null);
-  const [passwordError, setPasswordError] = React.useState(null);
-  const [loginError, setLoginError] = React.useState(null);
+  const [emailError, setEmailError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
+  const [loginError, setLoginError] = React.useState('');
 
   const validateEmail = () => {
     if (!email) {
@@ -63,43 +62,31 @@ const LoginForm = ({ setClient }) => {
             _.has(data, 'token.refreshToken') &&
             _.has(data, 'token.accessToken')
           ) {
-            setIsLoginSuccessful(true);
             cookies.set('refreshToken', `${data.token.refreshToken}`);
             cookies.set('userId', `${data.user.id}`);
             setClient(data.token.accessToken);
+            history.push('/dashboard');
           } else {
+            setIsSubmitting(false);
             setLoginError(`Invalid token received`);
-            setTimeout(() => setLoginError(null), 5000);
           }
         } else {
+          setIsSubmitting(false);
           setLoginError(`Server response: ${data.message}`);
-          setTimeout(() => setLoginError(null), 5000);
         }
       })
-      .then(() => {
+      .catch((err) => {
+        // eslint-disable-next-line no-console
+        console.error(err);
         setIsSubmitting(false);
-        setEmail('');
-        setPassword('');
-      })
-      .then(() => {
-        if (isLoginSuccessful) {
-          history.push('/dashboard');
-        }
       });
   };
 
   useEffect(() => {
-    if (isSubmitting && _.isEmpty(emailError) && _.isEmpty(passwordError)) {
+    if (isSubmitting && !emailError && !passwordError) {
       attemptLogin();
     }
-  }, [
-    emailError,
-    passwordError,
-    email,
-    password,
-    isLoginSuccessful,
-    isSubmitting,
-  ]);
+  }, [isSubmitting]);
 
   const onSubmit = () => {
     validateEmail();
@@ -108,12 +95,16 @@ const LoginForm = ({ setClient }) => {
   };
 
   const onEmailChange = (e, { value }) => {
-    if (emailError) setEmailError(null);
+    if (isSubmitting) setIsSubmitting(false);
+    if (loginError) setLoginError('');
+    if (emailError) setEmailError('');
     setEmail(value);
   };
 
   const onPasswordChange = (e, { value }) => {
-    if (passwordError) setPasswordError(null);
+    if (isSubmitting) setIsSubmitting(false);
+    if (loginError) setLoginError('');
+    if (passwordError) setPasswordError('');
     setPassword(value);
   };
 
@@ -124,7 +115,7 @@ const LoginForm = ({ setClient }) => {
           Log-in to your account
         </Header>
         <Message
-          hidden={_.isEmpty(loginError)}
+          hidden={!loginError}
           error
           header="Login failure"
           content={loginError}
@@ -139,10 +130,12 @@ const LoginForm = ({ setClient }) => {
               onChange={onEmailChange}
               value={email}
               error={
-                emailError && {
-                  content: emailError,
-                  pointing: 'above',
-                }
+                emailError
+                  ? {
+                      content: emailError,
+                      pointing: 'above',
+                    }
+                  : null
               }
             />
             <Form.Input
@@ -154,10 +147,12 @@ const LoginForm = ({ setClient }) => {
               onChange={onPasswordChange}
               value={password}
               error={
-                passwordError && {
-                  content: passwordError,
-                  pointing: 'above',
-                }
+                passwordError
+                  ? {
+                      content: passwordError,
+                      pointing: 'above',
+                    }
+                  : null
               }
             />
 

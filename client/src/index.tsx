@@ -95,6 +95,9 @@ class App extends React.Component<
             }
           } else if (!isLoginRoute) {
             this.redirectToLogin();
+          } else {
+            // Refresh request failed and we are on a login route
+            this.setState({ loading: false });
           }
         })
         .catch((err) => {
