@@ -11,8 +11,14 @@ import getRouteConfig from './routes';
 import history from './utils/history';
 import 'semantic-ui-css/semantic.min.css';
 
-window['accessToken'] = '';
-window['userId'] = '';
+let token;
+try {
+  // eslint-disable-next-line global-require, import/no-unresolved, @typescript-eslint/no-var-requires
+  const tokenObj = require('../token.json');
+  token = tokenObj.token;
+} catch {
+  //
+}
 
 const { Router, Switch, Route } = ReactRouter;
 
@@ -29,8 +35,15 @@ class App extends React.Component<
     this.state = {
       client: new ApolloClient({
         uri: 'http://localhost:3001/api',
+        request: (operation) => {
+          operation.setContext({
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          });
+        },
       }),
-      loading: true,
+      loading: !token,
     };
   }
 
@@ -74,6 +87,7 @@ class App extends React.Component<
     const userId = cookies.get('userId');
     const isLoginRoute = this.isLoginRoute();
 
+    if (token) return;
     if (refreshToken && userId) {
       const requestOptions = {
         method: 'POST',

@@ -102,6 +102,7 @@ dist
 
 # Local/Private config
 config/local.json
+token.json
 
 # Unwanted temporary files
 .tmp
