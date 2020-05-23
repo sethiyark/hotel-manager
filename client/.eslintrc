@@ -29,6 +29,7 @@
     "react/jsx-uses-vars": "warn",
     "no-unused-vars": 1,
     "camelcase": 0,
+    "dot-notation": 0,
 
     "import/extensions": [
       "error",
