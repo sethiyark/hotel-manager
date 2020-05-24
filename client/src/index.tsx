@@ -1,5 +1,5 @@
 import * as React from 'react';
-import * as ReactRouter from 'react-router-dom';
+import { Router, Switch, Route, withRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
@@ -19,8 +19,6 @@ try {
 } catch {
   //
 }
-
-const { Router, Switch, Route } = ReactRouter;
 
 const cookies = new Cookies();
 
@@ -141,9 +139,11 @@ class App extends React.Component<
   }
 }
 
+const RootApp = withRouter(App);
+
 ReactDOM.render(
   <Router history={history}>
-    <App />
+    <RootApp />
   </Router>,
 
   document.getElementById('app')
