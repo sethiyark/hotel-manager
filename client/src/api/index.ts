@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost';
 export const GET_ROOMS = gql`
   {
     rooms {
+      id: _id
       displayName
       floor
       config {
@@ -11,6 +12,15 @@ export const GET_ROOMS = gql`
         airConditioned
         priorityCleaned
       }
+    }
+  }
+`;
+
+export const FETCH_ROOM = gql`
+  query Room($id: ID!) {
+    room(id: $id) {
+      id: _id
+      displayName
     }
   }
 `;

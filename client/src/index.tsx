@@ -1,20 +1,25 @@
 import * as React from 'react';
-import * as ReactRouter from 'react-router-dom';
+import { Router, Switch, Route, withRouter } from 'react-router-dom';
 import * as ReactDOM from 'react-dom';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from '@apollo/react-hooks';
 import _, { map } from 'lodash';
 import Cookies from 'universal-cookie';
 import { Loader } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 
 import getRouteConfig from './routes';
 import history from './utils/history';
-import 'semantic-ui-css/semantic.min.css';
+import './styles/index.scss';
 
-window['accessToken'] = '';
-window['userId'] = '';
-
-const { Router, Switch, Route } = ReactRouter;
+let token;
+try {
+  // eslint-disable-next-line global-require, import/no-unresolved, @typescript-eslint/no-var-requires
+  const tokenObj = require('../token.json');
+  token = tokenObj.token;
+} catch {
+  //
+}
 
 const cookies = new Cookies();
 
@@ -29,8 +34,15 @@ class App extends React.Component<
     this.state = {
       client: new ApolloClient({
         uri: 'http://localhost:3001/api',
+        request: (operation) => {
+          operation.setContext({
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          });
+        },
       }),
-      loading: true,
+      loading: !token,
     };
   }
 
@@ -74,6 +86,7 @@ class App extends React.Component<
     const userId = cookies.get('userId');
     const isLoginRoute = this.isLoginRoute();
 
+    if (token) return;
     if (refreshToken && userId) {
       const requestOptions = {
         method: 'POST',
@@ -127,9 +140,11 @@ class App extends React.Component<
   }
 }
 
+const RootApp = withRouter(App);
+
 ReactDOM.render(
   <Router history={history}>
-    <App />
+    <RootApp />
   </Router>,
 
   document.getElementById('app')

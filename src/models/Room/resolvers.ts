@@ -17,6 +17,10 @@ export default {
         return result;
       });
     },
+
+    room: async (root, args) => {
+      return Room.findOne({ _id: args.id });
+    },
   },
 
   Mutation: {

@@ -5,13 +5,15 @@ type RoomConfig {
 }
 
 type Room {
+  _id: ID
   displayName: String
   floor: Int
   config: RoomConfig
 }
 
 type Query {
-  rooms: [[Room]]
+  rooms: [[Room]],
+  room(id: ID): Room,
 }
 input RoomConfigInput {
   western: Boolean
