@@ -2,6 +2,10 @@
   .header {
     border-bottom: 1px solid lightgray;
 
+    .image {
+      cursor: pointer;
+    }
+
     .identification {
       display: flex;
       flex-flow: row;
@@ -44,7 +48,7 @@
 
       img {
         display: block;
-        margin: 0px auto 16px;
+        margin: 0 auto 16px;
       }
     }
 
