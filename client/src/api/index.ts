@@ -15,3 +15,12 @@ export const GET_ROOMS = gql`
     }
   }
 `;
+
+export const FETCH_ROOM = gql`
+  query Room($id: ID!) {
+    room(id: $id) {
+      id: _id
+      displayName
+    }
+  }
+`;

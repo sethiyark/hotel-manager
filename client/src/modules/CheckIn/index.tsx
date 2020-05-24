@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { withRouter, useParams } from 'react-router-dom';
 import moment from 'moment';
 import {
   Image,
@@ -10,19 +11,31 @@ import {
   Dropdown,
   Radio,
   Button,
+  Loader,
 } from 'semantic-ui-react';
 import SignatureCanvas from 'react-signature-canvas';
+import { useQuery } from '@apollo/react-hooks';
+import get from 'lodash/get';
 
+import { FETCH_ROOM } from '../../api';
 import './styles/CheckIn.scss';
 
 const CheckIn = () => {
+  const { id } = useParams();
+  if (!id) return null;
+
+  const { loading, data, error } = useQuery(FETCH_ROOM, {
+    variables: { id },
+  });
   const today = moment();
   let signatureRef;
+  let canvasInit = false;
   const [canvasSize, updateCanvasSize] = React.useState({
     width: 100,
     height: 100,
   });
   const [signature, setSignature] = React.useState();
+
   const setCanvasSize = () => {
     const canvasWrapper = document.getElementById('canvas-wrapper');
     updateCanvasSize({
@@ -30,14 +43,24 @@ const CheckIn = () => {
       height: canvasWrapper.offsetHeight - 22,
     });
   };
-  setTimeout(setCanvasSize, 0);
 
   React.useEffect(() => {
     window.addEventListener('resize', setCanvasSize);
     return () => {
       window.removeEventListener('resize', setCanvasSize);
     };
-  });
+  }, [id]);
+
+  if (error) return null;
+  if (loading) return <Loader active />;
+
+  const room = get(data, 'room');
+  if (!room) return null;
+
+  if (!canvasInit) {
+    setTimeout(setCanvasSize, 0);
+    canvasInit = true;
+  }
 
   return (
     <Grid as={Segment} container centered relaxed className="checkin">
@@ -78,7 +101,7 @@ const CheckIn = () => {
           />
           <Label size="medium">
             Room no.
-            <Label.Detail>101</Label.Detail>
+            <Label.Detail>{room.displayName}</Label.Detail>
           </Label>
         </Grid.Column>
         <Grid.Column className="time">
@@ -154,4 +177,4 @@ const CheckIn = () => {
   );
 };
 
-export default CheckIn;
+export default withRouter(CheckIn);
