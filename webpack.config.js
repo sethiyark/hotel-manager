@@ -9,6 +9,7 @@ module.exports = () => {
     output: {
       path: path.resolve(__dirname, 'dist/static'),
       filename: 'index_bundle.js',
+      publicPath: '/'
     },
     module: {
       rules: [
