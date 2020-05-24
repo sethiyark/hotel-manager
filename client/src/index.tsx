@@ -6,10 +6,11 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import _, { map } from 'lodash';
 import Cookies from 'universal-cookie';
 import { Loader } from 'semantic-ui-react';
+import 'semantic-ui-css/semantic.min.css';
 
 import getRouteConfig from './routes';
 import history from './utils/history';
-import 'semantic-ui-css/semantic.min.css';
+import './styles/index.scss';
 
 let token;
 try {
