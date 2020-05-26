@@ -54,6 +54,12 @@ const CheckIn = () => {
     });
   };
 
+  const currentState = React.useRef({ signature, isDashboardOpen });
+
+  React.useEffect(() => {
+    currentState.current = { signature, isDashboardOpen };
+  }, [signature, isDashboardOpen]);
+
   React.useEffect(() => {
     window.addEventListener('resize', setCanvasSize);
     return () => {
