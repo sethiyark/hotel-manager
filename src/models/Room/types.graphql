@@ -13,8 +13,9 @@ type Room {
 
 type Query {
   rooms: [[Room]],
-  room(id: ID): Room,
+  room(id: [ID!]!): [Room],
 }
+
 input RoomConfigInput {
   western: Boolean
   airConditioned: Boolean

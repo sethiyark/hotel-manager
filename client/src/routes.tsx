@@ -20,7 +20,7 @@ const getRouteConfig = ({ setClient }) => {
       exact: true,
     },
     {
-      path: '/checkin/:id',
+      path: '/checkin/:ids',
       component: loadable(() => import('./modules/CheckIn'), fallbackOption),
       exact: true,
     },

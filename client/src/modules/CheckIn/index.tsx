@@ -20,6 +20,7 @@ import { useQuery } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
+import isEmpty from 'lodash/isEmpty';
 import { DashboardModal } from '@uppy/react';
 import ReactCrop from 'react-image-crop';
 import '@uppy/core/dist/style.css';
@@ -38,13 +39,14 @@ const BASE_CROP_CONFIG = {
 };
 
 const CheckIn = () => {
-  const { id } = useParams();
-  if (!id) return null;
+  const { ids } = useParams();
+  if (!ids) return null;
+
+  const id = ids.split(',');
 
   const { loading, data, error } = useQuery(FETCH_ROOM, {
     variables: { id },
   });
-  const today = moment();
   let signatureRef;
   const [canvasInit, setCanvasInit] = React.useState(false);
   const [canvasSize, updateCanvasSize] = React.useState({
@@ -120,8 +122,10 @@ const CheckIn = () => {
   if (error) return null;
   if (loading) return <Loader active />;
 
-  const room = get(data, 'room');
-  if (!room) return null;
+  const rooms = get(data, 'room');
+  if (isEmpty(rooms)) return null;
+
+  const today = moment();
 
   if (!canvasInit) {
     setTimeout(setCanvasSize, 0);
@@ -219,6 +223,8 @@ const CheckIn = () => {
     setOpenDashboardIndex(-1);
   };
 
+  const roomNos = map(rooms, 'displayName').join(', ');
+
   return (
     <>
       <Grid as={Segment} container centered relaxed className="checkin">
@@ -271,7 +277,7 @@ const CheckIn = () => {
             />
             <Label size="medium">
               Room no.
-              <Label.Detail>{room.displayName}</Label.Detail>
+              <Label.Detail>{roomNos}</Label.Detail>
             </Label>
           </Grid.Column>
           <Grid.Column className="time">

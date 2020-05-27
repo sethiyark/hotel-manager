@@ -19,7 +19,7 @@ export default {
     },
 
     room: async (root, args) => {
-      return Room.findOne({ _id: args.id });
+      return Room.find({ _id: args.id });
     },
   },
 
