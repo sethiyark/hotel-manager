@@ -1,5 +1,11 @@
 .dashboard {
   .room-item {
-    margin: 4px;
+    background-color: unset;
+    padding: 4px;
+    color: black;
+  }
+
+  .current-room {
+    color: white;
   }
 }
