@@ -94,12 +94,10 @@ const CheckIn = () => {
   const registerUppyListeners = () => {
     forEach(uppyInstances, (i) => {
       i.setOptions({
-        onBeforeFileAdded: (file) => {
+        onBeforeFileAdded: (file: UppyFile) => {
           const imgUrl = URL.createObjectURL(file.data);
           setImageToEdit(imgUrl);
           setOriginalFile(file);
-          // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
-          // @ts-ignore
           return file.isEdited;
         },
       });
