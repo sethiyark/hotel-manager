@@ -25,6 +25,7 @@ import { DashboardModal } from '@uppy/react';
 import ReactCrop from 'react-image-crop';
 import '@uppy/core/dist/style.css';
 import '@uppy/dashboard/dist/style.css';
+import '@uppy/webcam/dist/style.css';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { FETCH_ROOM } from '../../api';
@@ -98,7 +99,7 @@ const CheckIn = () => {
           const imgUrl = URL.createObjectURL(file.data);
           setImageToEdit(imgUrl);
           setOriginalFile(file);
-          return file.isEdited;
+          return file.isEdited === true;
         },
       });
     });
@@ -355,7 +356,7 @@ const CheckIn = () => {
           plugins={['webcam']}
           open={index === openDashboardIndex}
           animateOpenClose
-          onRequestClose={() => handleModalClose()}
+          onRequestClose={handleModalClose}
           showLinkToFileUploadResult
           proudlyDisplayPoweredByUppy={false}
         />
@@ -372,11 +373,11 @@ const CheckIn = () => {
             src={imageToEdit}
             onImageLoaded={onEditImageLoad}
             crop={crop}
-            onChange={(c) => setCrop(c)}
+            onChange={setCrop}
           />
         </Modal.Description>
         <Modal.Actions>
-          <Button primary onClick={() => onCropImageClose()}>
+          <Button primary onClick={onCropImageClose}>
             Proceed
             <Icon name="angle right" />
           </Button>

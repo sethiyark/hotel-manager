@@ -13,7 +13,13 @@ function createUppyInstance() {
     allowMultipleUploads: false,
   });
 
-  uppy.use(WebCam, { id: 'webcam' });
+  uppy.use(WebCam, {
+    id: 'webcam',
+    title: 'Camera',
+    modes: ['picture'],
+    mirror: true,
+    facingMode: 'user',
+  });
 
   uppy.on('upload', (data) => {
     // eslint-disable-next-line no-console
