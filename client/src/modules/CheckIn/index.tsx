@@ -30,7 +30,7 @@ import { FETCH_ROOM } from '../../api';
 import './styles/CheckIn.scss';
 import createUppyInstance from './uppy';
 
-const uppys = () => map(Array(3), createUppyInstance);
+const uppys = map(Array(3), createUppyInstance);
 const BASE_CROP_CONFIG = {
   unit: '%',
   width: 30,
@@ -46,7 +46,7 @@ const CheckIn = () => {
   });
   const today = moment();
   let signatureRef;
-  let canvasInit = false;
+  const [canvasInit, setCanvasInit] = React.useState(false);
   const [canvasSize, updateCanvasSize] = React.useState({
     width: 100,
     height: 100,
@@ -54,7 +54,7 @@ const CheckIn = () => {
   const [signature, setSignature] = React.useState();
 
   const [openDashboardIndex, setOpenDashboardIndex] = React.useState(-1);
-  const [uppyInstances] = React.useState(uppys());
+  const [uppyInstances] = React.useState(uppys);
   const [selectedImgIdFront, setSelectedImgIdFront] = React.useState('');
   const [selectedImgIdBack, setSelectedImgIdBack] = React.useState('');
   const [selectedImgProfile, setSelectedImgProfile] = React.useState('');
@@ -125,7 +125,7 @@ const CheckIn = () => {
 
   if (!canvasInit) {
     setTimeout(setCanvasSize, 0);
-    canvasInit = true;
+    setCanvasInit(true);
   }
 
   const onImageClick = (_id) => {
