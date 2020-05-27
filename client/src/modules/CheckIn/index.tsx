@@ -111,7 +111,7 @@ const CheckIn = () => {
       window.removeEventListener('resize', setCanvasSize);
       uppyInstances.forEach((i) => i.close());
     };
-  }, [id]);
+  }, [ids]);
 
   const onEditImageLoad = (img) => {
     setImageBeingEdited(img);
