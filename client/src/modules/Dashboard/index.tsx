@@ -1,40 +1,59 @@
 import * as React from 'react';
 import { Grid, Loader, Button, Modal, Icon } from 'semantic-ui-react';
-import { map, get } from 'lodash';
 import { useQuery } from '@apollo/react-hooks';
+import map from 'lodash/map';
+import get from 'lodash/get';
+import without from 'lodash/without';
 
 import { RoomIcon } from '../../components';
 import { GET_ROOMS } from '../../api';
 
 import './styles/Dashboard.scss';
 import Room from './Room';
+import useLongPress from '../../utils/longPress';
 
 const Dashboard = () => {
   const { loading, data } = useQuery(GET_ROOMS);
 
-  const [housekeeping, setHousekeeping] = React.useState(false);
-  const state = React.useRef({ housekeeping });
-
-  React.useEffect(() => {
-    state.current = { housekeeping };
-  }, [housekeeping]);
-
-  const toggleHousekeeping = () => {
-    setHousekeeping(!state.current.housekeeping);
-  };
+  const [selectedRooms, setSelectedRooms] = React.useState([]);
 
   if (loading) return <Loader active />;
   const rooms = get(data, 'rooms', []);
 
-  const renderRow = (room, index) => {
+  const RenderRow = ({
+    room,
+    index,
+  }: {
+    room: Record<string, any>;
+    index: number;
+  }) => {
+    const [isOpen, setIsOpen] = React.useState(false);
     const textAlign = index % 2 ? 'left' : 'right';
     const mirror = !!(index % 2);
-    const { displayName, config } = room;
+    const { displayName, config, id } = room;
+
+    const openModal = useLongPress(() => {
+      setIsOpen(true);
+    });
+
+    const selectRoom = () => {
+      if (selectedRooms.includes(id)) {
+        setSelectedRooms(without(selectedRooms, id));
+      } else {
+        setSelectedRooms([...selectedRooms, id]);
+      }
+    };
+
     return (
-      <Grid.Column key={index} textAlign={textAlign}>
+      <Grid.Column textAlign={textAlign}>
         <Modal
           trigger={
-            <Button className="room-item">
+            <Button
+              active={selectedRooms.includes(id)}
+              className="room-item"
+              {...openModal}
+              onClick={selectRoom}
+            >
               <RoomIcon
                 size={60}
                 config={config}
@@ -43,34 +62,30 @@ const Dashboard = () => {
               />
             </Button>
           }
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
           basic
           centered={false}
         >
-          <Modal.Header>
+          <Modal.Header className="room-header">
             <Icon name="bed" />
             Room:&nbsp;
             {displayName}
-            <Button
-              floated="right"
-              toggle
-              active={housekeeping}
-              onClick={toggleHousekeeping}
-            >
-              Housekeeping
-            </Button>
           </Modal.Header>
           <Modal.Content>
-            <Room room={room} mirror={mirror} housekeeping={housekeeping} />
+            <Room room={room} mirror={mirror} />
           </Modal.Content>
         </Modal>
       </Grid.Column>
     );
   };
 
-  const renderCol = (rows, index) => (
+  const renderCol = (rows: any[], index) => (
     <Grid.Column key={index}>
       <Grid container centered relaxed columns={2}>
-        {map(rows, renderRow)}
+        {map(rows, (room, idx) => (
+          <RenderRow key={room.id} room={room} index={idx} />
+        ))}
       </Grid>
     </Grid.Column>
   );
