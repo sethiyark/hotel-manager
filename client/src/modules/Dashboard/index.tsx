@@ -14,22 +14,29 @@ import { useQuery } from '@apollo/react-hooks';
 import map from 'lodash/map';
 import get from 'lodash/get';
 import without from 'lodash/without';
+import flatMap from 'lodash/flatMap';
+import filter from 'lodash/filter';
 
 import { RoomIcon } from '../../components';
 import { GET_ROOMS } from '../../api';
-
-import './styles/Dashboard.scss';
 import Room from './Room';
 import useLongPress from '../../utils/longPress';
+import BookingModal from './BookingModal';
+
+import './styles/Dashboard.scss';
 
 const Dashboard = () => {
   const history = useHistory();
   const { loading, data } = useQuery(GET_ROOMS);
 
   const [selectedRooms, setSelectedRooms] = React.useState([]);
+  const [showBooking, setShowBooking] = React.useState(false);
 
   if (loading) return <Loader active />;
   const rooms = get(data, 'rooms', []);
+  const flatRooms = flatMap(rooms);
+
+  const activeRooms = filter(flatRooms, ({ id }) => selectedRooms.includes(id));
 
   const RenderRow = ({
     room,
@@ -101,6 +108,10 @@ const Dashboard = () => {
     </Grid.Column>
   );
 
+  const clearRoomSelection = () => {
+    if (!showBooking) setSelectedRooms([]);
+  };
+
   return (
     <>
       <Grid
@@ -116,9 +127,7 @@ const Dashboard = () => {
       <TransitionablePortal
         open={!!selectedRooms.length}
         transition={{ animation: 'fly up' }}
-        onClose={() => {
-          setSelectedRooms([]);
-        }}
+        onClose={clearRoomSelection}
       >
         <Segment>
           <Container>
@@ -126,13 +135,16 @@ const Dashboard = () => {
               floated="right"
               icon="close"
               basic
-              onClick={() => setSelectedRooms([])}
+              onClick={clearRoomSelection}
             />
             <Button
               icon="clipboard list"
               content="Book"
               size="big"
               color="blue"
+              onClick={() => {
+                setShowBooking(true);
+              }}
             />
             <Button
               icon="clipboard check"
@@ -146,6 +158,15 @@ const Dashboard = () => {
           </Container>
         </Segment>
       </TransitionablePortal>
+      <BookingModal
+        key={selectedRooms.join()}
+        open={showBooking}
+        onClose={() => {
+          setShowBooking(false);
+          setSelectedRooms([]);
+        }}
+        activeRooms={activeRooms}
+      />
     </>
   );
 };

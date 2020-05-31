@@ -299,7 +299,7 @@ const CheckIn = () => {
         <Grid.Row columns={2}>
           <Grid.Column className="details">
             <div className="payment">
-              <Input label="Time" icon="pencil" size="large" />
+              <Input label="Time" type="time" icon="pencil" size="large" />
               <Input label="Rate" icon="pencil" size="large" />
               <Input
                 label="Toiletries"
