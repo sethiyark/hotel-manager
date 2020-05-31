@@ -2,13 +2,7 @@ import { Schema, model } from 'mongoose';
 
 const customerSchema = new Schema({
   name: String,
-
-  age: String,
-
   address: String,
-
-  checkinId: Schema.Types.ObjectId,
-
   idProofs: [
     {
       idType: String,
@@ -19,11 +13,7 @@ const customerSchema = new Schema({
       ],
     },
   ],
-
-  contact: {
-    mobile: String,
-    email: String,
-  },
+  contact: String,
 });
 
 const Model = model<ICustomer>('Customer', customerSchema);

@@ -15,6 +15,13 @@ const roomSchema = new Schema({
       priorityCleaned: -1,
     },
   },
+  instructions: [
+    {
+      type: String,
+      uri: String,
+      from: Schema.Types.ObjectId, // user_id
+    },
+  ],
 });
 
 const Model = model('Room', roomSchema);
