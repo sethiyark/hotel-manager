@@ -1,7 +1,18 @@
 # Add bills object types
 type Bill {
-  billLog: String
-  billPaid: String
+  billLog: [BillLog]
+  billPaid: [BillPaid]
+}
+
+type BillLog {
+  amount: Int
+  createdAt: String
+}
+
+type BillPaid {
+  amount: Int
+  createdAt: String
+  mode: String
 }
 
 type Query {

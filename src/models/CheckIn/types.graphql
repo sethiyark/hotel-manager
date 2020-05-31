@@ -1,11 +1,28 @@
 type CheckIn {
+  _id: ID
+  nOccupants: Int
+  roomIds: [ID]
   inTime: String
   outTime: String
   state: String
+  customer: Customer
+  bill: Bill
+}
+
+type Bill {
+  _id: ID
+}
+type Customer {
+  _id: ID
 }
 
 type Query {
   checkIns: [CheckIn]
+}
+
+input Advance {
+  amount: Int
+  mode: String
 }
 
 type Mutation {
@@ -14,13 +31,10 @@ type Mutation {
     address: String,
     contact: String,
     inTime: String,
-    nOccupants: Number,
+    nOccupants: Int,
     roomIds: [ID],
     state: String,
-    amount: Number,
-    advance: {
-      amount: Number,
-      mode: String,
-    }
+    amount: Int,
+    advance: Advance
   ): CheckIn
 }
