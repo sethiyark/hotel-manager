@@ -1,5 +1,15 @@
 import * as React from 'react';
-import { Grid, Loader, Button, Modal, Icon } from 'semantic-ui-react';
+import { useHistory } from 'react-router-dom';
+import {
+  Grid,
+  Loader,
+  Button,
+  Modal,
+  Icon,
+  TransitionablePortal,
+  Segment,
+  Container,
+} from 'semantic-ui-react';
 import { useQuery } from '@apollo/react-hooks';
 import map from 'lodash/map';
 import get from 'lodash/get';
@@ -13,6 +23,7 @@ import Room from './Room';
 import useLongPress from '../../utils/longPress';
 
 const Dashboard = () => {
+  const history = useHistory();
   const { loading, data } = useQuery(GET_ROOMS);
 
   const [selectedRooms, setSelectedRooms] = React.useState([]);
@@ -91,9 +102,51 @@ const Dashboard = () => {
   );
 
   return (
-    <Grid container centered relaxed doubling columns={3} className="dashboard">
-      {map(rooms, renderCol)}
-    </Grid>
+    <>
+      <Grid
+        container
+        centered
+        relaxed
+        doubling
+        columns={3}
+        className="dashboard"
+      >
+        {map(rooms, renderCol)}
+      </Grid>
+      <TransitionablePortal
+        open={!!selectedRooms.length}
+        transition={{ animation: 'fly up' }}
+        onClose={() => {
+          setSelectedRooms([]);
+        }}
+      >
+        <Segment>
+          <Container>
+            <Button
+              floated="right"
+              icon="close"
+              basic
+              onClick={() => setSelectedRooms([])}
+            />
+            <Button
+              icon="clipboard list"
+              content="Book"
+              size="big"
+              color="blue"
+            />
+            <Button
+              icon="clipboard check"
+              content="Check-in"
+              size="big"
+              color="green"
+              onClick={() => {
+                history.push(`checkin/${selectedRooms.join(',')}`);
+              }}
+            />
+          </Container>
+        </Segment>
+      </TransitionablePortal>
+    </>
   );
 };
 
