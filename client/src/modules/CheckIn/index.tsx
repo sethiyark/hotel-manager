@@ -16,7 +16,7 @@ import {
   Icon,
 } from 'semantic-ui-react';
 import SignatureCanvas from 'react-signature-canvas';
-import { useQuery } from '@apollo/react-hooks';
+import { useQuery, useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
@@ -28,7 +28,7 @@ import '@uppy/dashboard/dist/style.css';
 import '@uppy/webcam/dist/style.css';
 import 'react-image-crop/dist/ReactCrop.css';
 
-import { FETCH_ROOM } from '../../api';
+import { FETCH_ROOM, NEW_CHECK_IN, GET_ROOMS } from '../../api';
 import './styles/CheckIn.scss';
 import createUppyInstance from './uppy';
 
@@ -45,8 +45,12 @@ const CheckIn = () => {
 
   const id = ids.split(',');
 
+  const today = moment();
   const { loading, data, error } = useQuery(FETCH_ROOM, {
     variables: { id },
+  });
+  const [newCheckInMutation] = useMutation(NEW_CHECK_IN, {
+    refetchQueries: [{ query: GET_ROOMS }],
   });
   let signatureRef;
   const [canvasInit, setCanvasInit] = React.useState(false);
@@ -54,7 +58,24 @@ const CheckIn = () => {
     width: 100,
     height: 100,
   });
-  const [signature, setSignature] = React.useState();
+  const [checkInData, setCheckInData] = React.useState({
+    roomIds: id,
+    state: 'occupied',
+    name: '',
+    contact: '',
+    address: '',
+    time: '',
+    inTime: today.toISOString,
+    nOccupants: 1,
+    amount: 1500,
+    toiletries: 0,
+    advance: {
+      mode: 'cash',
+      amount: 0,
+    },
+    signature: null,
+  });
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const [openDashboardIndex, setOpenDashboardIndex] = React.useState(-1);
   const [uppyInstances] = React.useState(uppys);
@@ -68,6 +89,7 @@ const CheckIn = () => {
 
   const setCanvasSize = () => {
     const canvasWrapper = document.getElementById('canvas-wrapper');
+    if (!canvasWrapper) return;
     updateCanvasSize({
       width: canvasWrapper.offsetWidth - 22,
       height: canvasWrapper.offsetHeight - 22,
@@ -75,7 +97,6 @@ const CheckIn = () => {
   };
 
   const currentState = React.useRef({
-    signature,
     openDashboardIndex,
     crop,
     imageBeingEdited,
@@ -84,13 +105,12 @@ const CheckIn = () => {
 
   React.useEffect(() => {
     currentState.current = {
-      signature,
       openDashboardIndex,
       crop,
       imageBeingEdited,
       originalFile,
     };
-  }, [signature, openDashboardIndex, crop, imageBeingEdited, originalFile]);
+  }, [openDashboardIndex, crop, imageBeingEdited, originalFile]);
 
   const registerUppyListeners = () => {
     forEach(uppyInstances, (i) => {
@@ -123,8 +143,6 @@ const CheckIn = () => {
 
   const rooms = get(data, 'room');
   if (isEmpty(rooms)) return null;
-
-  const today = moment();
 
   if (!canvasInit) {
     setTimeout(setCanvasSize, 0);
@@ -250,11 +268,33 @@ const CheckIn = () => {
               />
             </div>
             <div className="customer-info">
-              <Input label="Contact" size="mini" />
-              <Input label="Name" size="mini" />
+              <Input
+                label="Contact"
+                size="mini"
+                value={checkInData.contact}
+                onChange={(e, { value: contact }) => {
+                  setCheckInData({ ...checkInData, contact });
+                }}
+              />
+              <Input
+                label="Name"
+                size="mini"
+                value={checkInData.name}
+                onChange={(e, { value: name }) => {
+                  setCheckInData({ ...checkInData, name });
+                }}
+              />
               <div className="address">
                 <Label>Address</Label>
-                <TextArea />
+                <TextArea
+                  value={checkInData.address}
+                  onChange={(e, { value }) => {
+                    setCheckInData({
+                      ...checkInData,
+                      address: value.toString(),
+                    });
+                  }}
+                />
               </div>
             </div>
           </Grid.Column>
@@ -293,14 +333,35 @@ const CheckIn = () => {
               label="No. of Person"
               className="person-count"
               size="mini"
+              value={checkInData.nOccupants}
+              onChange={(e, { value }) => {
+                setCheckInData({ ...checkInData, nOccupants: Number(value) });
+              }}
             />
           </Grid.Column>
         </Grid.Row>
         <Grid.Row columns={2}>
           <Grid.Column className="details">
             <div className="payment">
-              <Input label="Time" type="time" icon="pencil" size="large" />
-              <Input label="Rate" icon="pencil" size="large" />
+              <Input
+                label="Time"
+                type="time"
+                icon="pencil"
+                size="large"
+                value={checkInData.time}
+                onChange={(e, { value: time }) => {
+                  setCheckInData({ ...checkInData, time });
+                }}
+              />
+              <Input
+                label="Rate"
+                icon="pencil"
+                size="large"
+                value={checkInData.amount}
+                onChange={(e, { value }) => {
+                  setCheckInData({ ...checkInData, amount: Number(value) });
+                }}
+              />
               <Input
                 label="Toiletries"
                 type="number"
@@ -318,16 +379,50 @@ const CheckIn = () => {
                       { key: 'online', text: 'Online', value: 'online' },
                     ]}
                     defaultValue="cash"
+                    onChange={(e, { value }) => {
+                      setCheckInData({
+                        ...checkInData,
+                        advance: {
+                          mode: String(value),
+                          amount: checkInData.advance.amount,
+                        },
+                      });
+                    }}
                   />
                 }
                 label="Advance"
+                value={checkInData.advance.amount}
+                onChange={(e, { value }) => {
+                  setCheckInData({
+                    ...checkInData,
+                    advance: {
+                      mode: checkInData.advance.mode,
+                      amount: Number(value),
+                    },
+                  });
+                }}
               />
               <span>
                 <div className="bill">
                   <Label pointing="right">Bill</Label>
                   <Radio toggle />
                 </div>
-                <Button primary>Submit</Button>
+                <Button
+                  primary
+                  loading={isSubmitting}
+                  onClick={() => {
+                    setIsSubmitting(true);
+                    newCheckInMutation({ variables: checkInData })
+                      .catch((err) => {
+                        console.log(err);
+                      })
+                      .finally(() => {
+                        setIsSubmitting(false);
+                      });
+                  }}
+                >
+                  Submit
+                </Button>
               </span>
             </div>
           </Grid.Column>
@@ -342,7 +437,10 @@ const CheckIn = () => {
                 className: 'sigCanvas',
               }}
               onEnd={() => {
-                setSignature(signatureRef.toDataURL());
+                setCheckInData({
+                  ...checkInData,
+                  signature: signatureRef.toDataURL(),
+                });
               }}
             />
             <Label attached="bottom right">Customer Signature</Label>
