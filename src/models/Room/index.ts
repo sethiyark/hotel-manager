@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+import { CheckIn } from '../CheckIn';
+
 const roomSchema = new Schema({
   displayName: String,
   floor: Number,
@@ -24,10 +26,12 @@ const roomSchema = new Schema({
   ],
 });
 
-const Model = model('Room', roomSchema);
+const Model = model<IRoom>('Room', roomSchema);
 
 class Room extends Model {
-  //
+  getCheckIn = async () => {
+    return CheckIn.findOne({ roomIds: this.id, outTime: null });
+  };
 }
 
 export default Room;

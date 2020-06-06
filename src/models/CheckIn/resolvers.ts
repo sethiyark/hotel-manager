@@ -1,6 +1,11 @@
 import { Customer, CheckIn, Bill } from '..';
 
 export default {
+  CheckIn: {
+    customer: async (checkIn) => checkIn.getCustomer(),
+    bill: async (checkIn) => checkIn.getBill(),
+  },
+
   Mutation: {
     newCheckIn: async (root, args) => {
       let customer: Customer = null;

@@ -23,6 +23,10 @@ export default {
     },
   },
 
+  Room: {
+    checkIn: async (room) => room.getCheckIn(),
+  },
+
   Mutation: {
     addRoom: async (root, args) => {
       const room = new Room(_.pickBy(args, Boolean));
