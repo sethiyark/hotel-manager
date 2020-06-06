@@ -14,6 +14,8 @@ import {
   Loader,
   Modal,
   Icon,
+  Message,
+  Container,
 } from 'semantic-ui-react';
 import SignatureCanvas from 'react-signature-canvas';
 import { useQuery, useMutation } from '@apollo/react-hooks';
@@ -21,6 +23,7 @@ import get from 'lodash/get';
 import map from 'lodash/map';
 import forEach from 'lodash/forEach';
 import isEmpty from 'lodash/isEmpty';
+import some from 'lodash/some';
 import { DashboardModal } from '@uppy/react';
 import ReactCrop from 'react-image-crop';
 import '@uppy/core/dist/style.css';
@@ -143,6 +146,13 @@ const CheckIn = () => {
 
   const rooms = get(data, 'room');
   if (isEmpty(rooms)) return null;
+  if (some(rooms, 'checkIn')) {
+    return (
+      <Container>
+        <Message error header="Check-in failure" content="Room not vacant" />
+      </Container>
+    );
+  }
 
   if (!canvasInit) {
     setTimeout(setCanvasSize, 0);

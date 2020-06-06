@@ -21,6 +21,9 @@ export const FETCH_ROOM = gql`
     room(id: $id) {
       id: _id
       displayName
+      checkIn {
+        state
+      }
     }
   }
 `;
