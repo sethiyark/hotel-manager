@@ -48,7 +48,8 @@ const Dashboard = () => {
     const [isOpen, setIsOpen] = React.useState(false);
     const textAlign = index % 2 ? 'left' : 'right';
     const mirror = !!(index % 2);
-    const { displayName, config, id } = room;
+    const { displayName, config, id, checkIn } = room;
+    const state = get(checkIn, 'state', '');
 
     const openModal = useLongPress(() => {
       setIsOpen(true);
@@ -77,6 +78,7 @@ const Dashboard = () => {
                 config={config}
                 roomNo={displayName}
                 mirror={mirror}
+                state={state}
               />
             </Button>
           }

@@ -6,7 +6,7 @@ import './styles/RoomIcon.scss';
 
 interface RoomIconProps {
   size?: number;
-  color?: string;
+  state?: string;
   config?: {
     airConditioned: boolean;
     western: boolean;
@@ -18,10 +18,25 @@ interface RoomIconProps {
 }
 
 class RoomIcon extends React.PureComponent<RoomIconProps> {
+  getColor = () => {
+    const { state } = this.props;
+    switch (state) {
+      case 'occupied':
+        return '#DEEEDE';
+      case 'maintenance':
+        return '#B2B2B2';
+      case 'cleaning':
+        return '#FFFFCC';
+      case 'booked':
+        return '#E5F1FF';
+      default:
+        return '#FFCCCC';
+    }
+  };
+
   render() {
     const {
       size = 200,
-      color = '#f5f5f5',
       config = {
         airConditioned: false,
         western: false,
@@ -33,6 +48,7 @@ class RoomIcon extends React.PureComponent<RoomIconProps> {
     } = this.props;
     const height = size;
     const width = size * (16 / 9);
+    const color = this.getColor();
 
     const className = cx([
       'room-block',

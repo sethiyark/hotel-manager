@@ -12,6 +12,27 @@ export const GET_ROOMS = gql`
         airConditioned
         priorityCleaned
       }
+      checkIn {
+        id: _id
+        nOccupants
+        roomIds
+        inTime
+        state
+        customer {
+          name
+        }
+        bill {
+          billLog {
+            amount
+            createdAt
+          }
+          billPaid {
+            amount
+            createdAt
+            mode
+          }
+        }
+      }
     }
   }
 `;
