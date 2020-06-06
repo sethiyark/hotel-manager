@@ -1,41 +1,20 @@
-import fs from 'fs';
 import path from 'path';
-import { mergeSchemas, makeExecutableSchema } from 'graphql-tools';
+import { loadFilesSync } from '@graphql-tools/load-files';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import { Config } from 'apollo-server-koa';
 import getWinstonLogger from './utils/logger';
 
 log.verbose('Initiate building and merging GraphQL schemas');
 
-const modelBasePath = path.resolve(__dirname, 'models');
-const allModels = _.filter(fs.readdirSync(modelBasePath), (file) =>
-  fs.statSync(path.resolve(modelBasePath, file)).isDirectory()
+const typesArray = loadFilesSync(path.join(__dirname, 'models/**/*.graphql'));
+const typeDefs = mergeTypeDefs(typesArray);
+
+const resolversArray = loadFilesSync(
+  path.join(__dirname, 'models/**/resolvers.ts')
 );
-
-const subschemas = _.map(allModels, (model) => {
-  try {
-    const typeDefPath = path.resolve(modelBasePath, model, 'types.graphql');
-    const resolverPath = path.resolve(modelBasePath, model, 'resolvers.ts');
-
-    const typeDefs = fs.readFileSync(typeDefPath, { encoding: 'utf-8' });
-
-    // eslint-disable-next-line import/no-dynamic-require, global-require, @typescript-eslint/no-var-requires
-    const required = require(resolverPath);
-    const resolvers = required.default || required;
-
-    const schema = makeExecutableSchema({ typeDefs, resolvers });
-    return { schema };
-  } catch (err) {
-    log.error(`gql schema error in ${model} model: (${err.message})`);
-    return null;
-  }
-}).filter(Boolean);
-
-const typeDefs = fs.readFileSync(path.resolve(__dirname, 'linkTypes.graphql'), {
-  encoding: 'utf-8',
-});
-const schema = mergeSchemas({ subschemas, typeDefs });
-
-log.verbose('GraphQL schemas compiled');
+const resolvers = mergeResolvers(resolversArray);
+const schema = makeExecutableSchema({ typeDefs, resolvers });
 
 const fileLogger = getWinstonLogger({ label: 'GQL', onlyFile: 'queries.log' });
 

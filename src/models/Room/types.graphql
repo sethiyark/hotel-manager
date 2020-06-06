@@ -9,6 +9,7 @@ type Room {
   displayName: String
   floor: Int
   config: RoomConfig
+  checkIn: CheckIn
 }
 
 type Query {

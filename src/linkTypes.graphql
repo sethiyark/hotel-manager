@@ -1,8 +1,0 @@
-extend type CheckIn {
-  customer: Customer
-  bill: Bill
-}
-
-extend type Room {
-  checkIn: CheckIn
-}
