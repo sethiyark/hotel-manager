@@ -5,15 +5,6 @@ type CheckIn {
   inTime: String
   outTime: String
   state: String
-  customer: Customer
-  bill: Bill
-}
-
-type Bill {
-  _id: ID
-}
-type Customer {
-  _id: ID
 }
 
 type Query {

@@ -30,7 +30,10 @@ const subschemas = _.map(allModels, (model) => {
   }
 }).filter(Boolean);
 
-const schema = mergeSchemas({ subschemas });
+const typeDefs = fs.readFileSync(path.resolve(__dirname, 'linkTypes.graphql'), {
+  encoding: 'utf-8',
+});
+const schema = mergeSchemas({ subschemas, typeDefs });
 
 log.verbose('GraphQL schemas compiled');
 
