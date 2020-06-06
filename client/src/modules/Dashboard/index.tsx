@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useHistory } from 'react-router-dom';
 import {
   Grid,
   Loader,
@@ -22,21 +21,23 @@ import { GET_ROOMS } from '../../api';
 import Room from './Room';
 import useLongPress from '../../utils/longPress';
 import BookingModal from './BookingModal';
+import RoomActions from './RoomActions';
 
 import './styles/Dashboard.scss';
 
 const Dashboard = () => {
-  const history = useHistory();
   const { loading, data } = useQuery(GET_ROOMS);
 
   const [selectedRooms, setSelectedRooms] = React.useState([]);
   const [showBooking, setShowBooking] = React.useState(false);
+  const [isOpenId, setIsOpenId] = React.useState('');
 
   if (loading) return <Loader active />;
   const rooms = get(data, 'rooms', []);
   const flatRooms = flatMap(rooms);
 
   const activeRooms = filter(flatRooms, ({ id }) => selectedRooms.includes(id));
+  const activeState = get(activeRooms, '0.checkIn.state', '');
 
   const RenderRow = ({
     room,
@@ -45,22 +46,23 @@ const Dashboard = () => {
     room: Record<string, any>;
     index: number;
   }) => {
-    const [isOpen, setIsOpen] = React.useState(false);
     const textAlign = index % 2 ? 'left' : 'right';
     const mirror = !!(index % 2);
     const { displayName, config, id, checkIn } = room;
     const state = get(checkIn, 'state', '');
 
     const openModal = useLongPress(() => {
-      setIsOpen(true);
+      setIsOpenId(id);
     });
 
     const selectRoom = () => {
       if (selectedRooms.includes(id)) {
         setSelectedRooms(without(selectedRooms, id));
-      } else {
+      } else if (['maintenance', 'cleaning'].includes(state)) {
+        setSelectedRooms([id]);
+      } else if (activeState === state) {
         setSelectedRooms([...selectedRooms, id]);
-      }
+      } else setSelectedRooms([id]);
     };
 
     return (
@@ -82,8 +84,8 @@ const Dashboard = () => {
               />
             </Button>
           }
-          open={isOpen}
-          onClose={() => setIsOpen(false)}
+          open={isOpenId === id}
+          onClose={() => setIsOpenId('')}
           basic
           centered={false}
         >
@@ -139,23 +141,13 @@ const Dashboard = () => {
               basic
               onClick={clearRoomSelection}
             />
-            <Button
-              icon="clipboard list"
-              content="Book"
-              size="big"
-              color="blue"
-              onClick={() => {
+            <RoomActions
+              activeRooms={activeRooms}
+              activeState={activeState}
+              showBooking={() => {
                 setShowBooking(true);
               }}
-            />
-            <Button
-              icon="clipboard check"
-              content="Check-in"
-              size="big"
-              color="green"
-              onClick={() => {
-                history.push(`checkin/${selectedRooms.join(',')}`);
-              }}
+              setIsOpenId={setIsOpenId}
             />
           </Container>
         </Segment>
