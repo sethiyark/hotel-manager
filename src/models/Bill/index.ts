@@ -6,7 +6,7 @@ const billSchema = new Schema({
   billPaid: [Object],
 });
 
-const Model = model('Bill', billSchema);
+const Model = model<IBill>('Bill', billSchema);
 
 class Bill extends Model {
   //

@@ -9,6 +9,6 @@ declare global {
       airConditioned: boolean;
       priorityCleaned: number;
     };
-    getCheckInInfo(): Promise<ICheckIn>;
+    getCheckIn(): Promise<ICheckIn>;
   }
 }
