@@ -9,3 +9,9 @@
     color: white;
   }
 }
+.actions-close {
+  z-index: 10;
+  .button {
+    box-shadow: unset !important;
+  }
+}

@@ -8,6 +8,7 @@ import {
   TransitionablePortal,
   Segment,
   Container,
+  Rail,
 } from 'semantic-ui-react';
 import { useQuery } from '@apollo/react-hooks';
 import map from 'lodash/map';
@@ -133,14 +134,16 @@ const Dashboard = () => {
         transition={{ animation: 'fly up' }}
         onClose={clearRoomSelection}
       >
-        <Segment>
-          <Container>
-            <Button
-              floated="right"
-              icon="close"
-              basic
-              onClick={clearRoomSelection}
-            />
+        <Container>
+          <Segment>
+            <Rail attached internal position="right" className="actions-close">
+              <Button
+                floated="right"
+                icon="close"
+                basic
+                onClick={clearRoomSelection}
+              />
+            </Rail>
             <RoomActions
               activeRooms={activeRooms}
               activeState={activeState}
@@ -149,8 +152,8 @@ const Dashboard = () => {
               }}
               setIsOpenId={setIsOpenId}
             />
-          </Container>
-        </Segment>
+          </Segment>
+        </Container>
       </TransitionablePortal>
       <BookingModal
         key={selectedRooms.join()}
