@@ -54,6 +54,9 @@ export const NEW_CHECK_IN = gql`
     $name: String
     $address: String
     $contact: String
+    $imagesIdFront: [String]
+    $imagesIdBack: [String]
+    $imageProfile: String
     $inTime: String
     $nOccupants: Int
     $roomIds: [ID]
@@ -65,6 +68,9 @@ export const NEW_CHECK_IN = gql`
       name: $name
       address: $address
       contact: $contact
+      imagesIdFront: $imagesIdFront
+      imagesIdBack: $imagesIdBack
+      imageProfile: $imageProfile
       inTime: $inTime
       nOccupants: $nOccupants
       roomIds: $roomIds

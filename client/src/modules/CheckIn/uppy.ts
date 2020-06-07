@@ -1,15 +1,13 @@
 import Uppy from '@uppy/core';
 import WebCam from '@uppy/webcam';
-import XHRUpload from '@uppy/xhr-upload';
 
 function createUppyInstance() {
   const uppy = Uppy({
     meta: { type: 'avatar' },
     restrictions: {
       allowedFileTypes: ['image/*'],
-      maxNumberOfFiles: 1,
     },
-    autoProceed: false,
+    autoProceed: true,
     allowMultipleUploads: false,
   });
 
@@ -31,24 +29,9 @@ function createUppyInstance() {
     console.log('Added file', file);
   });
 
-  uppy.on('complete', (result) => {
-    // eslint-disable-next-line no-console
-    console.log('successful files:', result.successful);
-    // eslint-disable-next-line no-console
-    console.log('failed files:', result.failed);
-  });
-
-  uppy.use(XHRUpload, {
-    endpoint: 'https://upload-endpoint.uppy.io/upload',
-    formData: true,
-    fieldName: 'files[]',
-  });
-
   uppy.on('upload-success', (file, response) => {
     // eslint-disable-next-line no-console
-    console.log(file);
-    // eslint-disable-next-line no-console
-    console.log(response);
+    console.log(`File ${file.name} uploaded with response: `, response);
   });
 
   return uppy;

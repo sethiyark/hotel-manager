@@ -12,8 +12,13 @@ export default {
       if (args.name || args.address || args.contact) {
         const newCustomer = new Customer({
           name: args.name,
+          imageProfile: args.imageProfile,
           address: args.address,
           contact: args.contact,
+          idProof: {
+            imagesIdFront: args.imagesIdFront,
+            imagesIdBack: args.imagesIdBack,
+          },
         });
         await newCustomer.save();
         customer = newCustomer;
