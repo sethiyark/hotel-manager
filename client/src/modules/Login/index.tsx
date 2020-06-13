@@ -63,7 +63,7 @@ const LoginForm = ({ setClient }) => {
             _.has(data, 'token.accessToken')
           ) {
             cookies.set('refreshToken', `${data.token.refreshToken}`);
-            cookies.set('userId', `${data.user.id}`);
+            cookies.set('user', JSON.stringify(data.user));
             setClient(data.token.accessToken);
             history.push('/dashboard');
           } else {
