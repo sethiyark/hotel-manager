@@ -25,7 +25,7 @@ const getRouteConfig = ({ setClient }) => {
       exact: true,
     },
     {
-      path: '/bill/:ids',
+      path: '/bill/:id',
       component: loadable(() => import('./modules/BIll'), fallbackOption),
       exact: true,
     },

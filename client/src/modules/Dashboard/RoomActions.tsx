@@ -22,7 +22,7 @@ const RoomActions = ({
     history.push(checkInUrl);
   };
   const goToBill = () => {
-    const billUrl = `bill/${map(activeRooms, 'id').join(',')}`;
+    const billUrl = `bill/${get(activeRooms, '0.checkIn.id')}`;
     history.push(billUrl);
   };
 

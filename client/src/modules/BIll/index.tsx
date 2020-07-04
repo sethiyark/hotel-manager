@@ -14,7 +14,8 @@ const Field = ({ label, value }: { label: string; value: string | number }) => {
 };
 
 const Bill = () => {
-  const { ids } = useParams();
+  const { id } = useParams();
+  if (!id) return null;
   const profile = '';
 
   return (
