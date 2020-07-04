@@ -1,7 +1,12 @@
 import * as React from 'react';
 import { useParams, withRouter, useHistory } from 'react-router-dom';
-import { Segment, Grid, Image, Table, Button } from 'semantic-ui-react';
+import { Segment, Grid, Image, Table, Loader, Button } from 'semantic-ui-react';
+import { useQuery } from '@apollo/react-hooks';
+import moment from 'moment';
+import get from 'lodash/get';
+import map from 'lodash/map';
 
+import { FETCH_CHECKIN_BILL } from '../../api';
 import './styles/Bill.scss';
 
 const Field = ({ label, value }: { label: string; value: string | number }) => {
@@ -17,7 +22,17 @@ const Bill = () => {
   const history = useHistory();
   const { id } = useParams();
   if (!id) return null;
+
+  const { loading, data, error } = useQuery(FETCH_CHECKIN_BILL, {
+    variables: { id },
+  });
+
   const profile = '';
+  if (error) return null;
+  if (loading) return <Loader active />;
+
+  const { checkIn } = data;
+  const roomNos = map(get(checkIn, 'rooms'), 'displayName').join(', ');
 
   return (
     <Grid as={Segment} container centered relaxed celled className="bill">
@@ -33,6 +48,9 @@ const Bill = () => {
               }}
             />
           </span>
+          <span className="bill__title__name">
+            {get(checkIn, 'customer.name')}
+          </span>
           <span>
             <Image
               src={
@@ -41,26 +59,30 @@ const Bill = () => {
               }
               circular
               size="mini"
+              className="bill__title__profile"
             />
           </span>
         </Grid.Column>
       </Grid.Row>
       <Grid.Row columns={3}>
-        <Field label="Toiletries" value="1" />
-        <Field label="Room no" value="1" />
-        <Field label="Rate" value="1" />
+        <Field label="Toiletries" value="-" />
+        <Field label="Room no" value={roomNos} />
+        <Field label="Rate" value="-" />
       </Grid.Row>
       <Grid.Row columns={4}>
-        <Field label="Check-in Date" value="1" />
-        <Field label="Time" value="1" />
-        <Field label="No. of Person" value="1" />
-        <Field label="Bill no." value="1" />
+        <Field
+          label="Check-in Date"
+          value={moment(checkIn.inTime).format('DD MMMM YYYY')}
+        />
+        <Field label="Time" value={moment(checkIn.inTime).format('HH:MMa')} />
+        <Field label="No. of Person" value={checkIn.nOccupants || 1} />
+        <Field label="Bill no." value="-" />
       </Grid.Row>
       <Grid.Row columns={4}>
-        <Field label="Check-out Date" value="1" />
-        <Field label="Time" value="1" />
-        <Field label="Total Days" value="1" />
-        <Field label="Bill Date" value="1" />
+        <Field label="Check-out Date" value="-" />
+        <Field label="Time" value="-" />
+        <Field label="Total Days" value="-" />
+        <Field label="Bill Date" value="-" />
       </Grid.Row>
       <Grid.Row columns={1}>
         <Grid.Column>
