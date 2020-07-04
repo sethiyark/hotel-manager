@@ -1,0 +1,13 @@
+.bill {
+  .bill {
+    &__title {
+      span {
+        display: inline-block;
+        width: 33.3%;
+      }
+    }
+    &__field {
+      // border: 1px solid gray;
+    }
+  }
+}
