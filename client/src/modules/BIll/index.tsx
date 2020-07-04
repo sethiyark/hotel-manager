@@ -44,7 +44,7 @@ const Bill = () => {
               secondary
               content="Back"
               onClick={() => {
-                history.push('dashboard');
+                history.push('/dashboard');
               }}
             />
           </span>
