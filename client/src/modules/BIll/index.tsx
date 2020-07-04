@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useParams, withRouter } from 'react-router-dom';
-import { Segment, Grid, Image, Table } from 'semantic-ui-react';
+import { useParams, withRouter, useHistory } from 'react-router-dom';
+import { Segment, Grid, Image, Table, Button } from 'semantic-ui-react';
 
 import './styles/Bill.scss';
 
@@ -14,6 +14,7 @@ const Field = ({ label, value }: { label: string; value: string | number }) => {
 };
 
 const Bill = () => {
+  const history = useHistory();
   const { id } = useParams();
   if (!id) return null;
   const profile = '';
@@ -22,8 +23,16 @@ const Bill = () => {
     <Grid as={Segment} container centered relaxed celled className="bill">
       <Grid.Row>
         <Grid.Column className="bill__title">
-          <span>back</span>
-          <span>Name</span>
+          <span>
+            <Button
+              icon="arrow left"
+              secondary
+              content="Back"
+              onClick={() => {
+                history.push('dashboard');
+              }}
+            />
+          </span>
           <span>
             <Image
               src={
