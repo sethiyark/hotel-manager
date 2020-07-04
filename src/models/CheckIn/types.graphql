@@ -7,9 +7,11 @@ type CheckIn {
   state: String
   customer: Customer
   bill: Bill
+  rooms: [Room]
 }
 
 type Query {
+  checkIn(id: ID!): CheckIn,
   checkIns: [CheckIn]
 }
 
