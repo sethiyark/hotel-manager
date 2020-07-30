@@ -25,6 +25,7 @@ export const GET_ROOMS = gql`
           billLog {
             amount
             createdAt
+            type
           }
           billPaid {
             amount
