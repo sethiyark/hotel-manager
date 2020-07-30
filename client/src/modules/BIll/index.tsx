@@ -5,9 +5,14 @@ import { useQuery } from '@apollo/react-hooks';
 import moment from 'moment';
 import get from 'lodash/get';
 import map from 'lodash/map';
+import reduce from 'lodash/reduce';
+import forEach from 'lodash/forEach';
+import pickBy from 'lodash/pickBy';
 
 import { FETCH_CHECKIN_BILL } from '../../api';
 import './styles/Bill.scss';
+
+const GST = 5;
 
 const Field = ({ label, value }: { label: string; value: string | number }) => {
   return (
@@ -16,6 +21,67 @@ const Field = ({ label, value }: { label: string; value: string | number }) => {
       <span>{value}</span>
     </Grid.Column>
   );
+};
+
+const BillRow = ({
+  log,
+}: {
+  log: { type: string; createdAt: string; amount: number; gst: number };
+}) => {
+  const { type, amount, createdAt, gst } = log;
+  const bill = { [type]: amount };
+  const date = moment(createdAt);
+
+  return (
+    <Table.Row>
+      <Table.Cell>{date.format('DD MMMM, HH:MM')}</Table.Cell>
+      <Table.Cell>{get(bill, 'room', '-')}</Table.Cell>
+      <Table.Cell>{get(bill, 'restaurant', '-')}</Table.Cell>
+      <Table.Cell>{get(bill, 'laundry', '-')}</Table.Cell>
+      <Table.Cell>{get(bill, 'other', '-')}</Table.Cell>
+      <Table.Cell>{gst || '-'}</Table.Cell>
+      <Table.Cell>-</Table.Cell>
+      <Table.Cell>{get(bill, 'paid', '-')}</Table.Cell>
+      <Table.Cell>{amount + gst}</Table.Cell>
+    </Table.Row>
+  );
+};
+
+const getBillLog = (bill) => {
+  const billLog = map(get(bill, 'billLog', []), (log) => {
+    const gst = (log.amount * GST) / 100;
+    return { ...log, gst };
+  });
+  forEach(get(bill, 'billPaid'), (log) => {
+    billLog.push({
+      ...log,
+      type: 'paid',
+      gst: 0,
+    });
+  });
+  return billLog;
+};
+
+const computeBillLog = (billLog) => {
+  const totalBill = reduce(
+    billLog,
+    (total, log) => {
+      const result = total;
+      result[log.type] = (total[log.type] || 0) + (log.amount || 0);
+      result.gst = total.gst + (log.gst || 0);
+      return result;
+    },
+    { room: 0, restaurant: 0, laundry: 0, other: 0, paid: 0, gst: 0, total: 0 }
+  );
+  totalBill.total = reduce(
+    totalBill,
+    (result, amount, type) => {
+      if (type === 'paid') return result - amount;
+      return result + amount;
+    },
+    0
+  );
+  return pickBy(totalBill);
 };
 
 const Bill = () => {
@@ -33,6 +99,9 @@ const Bill = () => {
 
   const { checkIn } = data;
   const roomNos = map(get(checkIn, 'rooms'), 'displayName').join(', ');
+
+  const billLog = getBillLog(get(checkIn, 'bill', {}));
+  const totalBill = computeBillLog(billLog);
 
   return (
     <Grid as={Segment} container centered relaxed celled className="bill">
@@ -101,29 +170,35 @@ const Bill = () => {
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              <Table.Row>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-                <Table.Cell>-</Table.Cell>
-              </Table.Row>
+              {map(billLog, (log, index) => (
+                <BillRow log={log} key={index} />
+              ))}
             </Table.Body>
             <Table.Footer>
               <Table.Row>
                 <Table.HeaderCell>Total</Table.HeaderCell>
+                <Table.HeaderCell>
+                  {get(totalBill, 'room', '-')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {get(totalBill, 'restaurant', '-')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {get(totalBill, 'laundry', '-')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {get(totalBill, 'other', '-')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {get(totalBill, 'gst', '-')}
+                </Table.HeaderCell>
                 <Table.HeaderCell>-</Table.HeaderCell>
-                <Table.HeaderCell>-</Table.HeaderCell>
-                <Table.HeaderCell>-</Table.HeaderCell>
-                <Table.HeaderCell>-</Table.HeaderCell>
-                <Table.HeaderCell>-</Table.HeaderCell>
-                <Table.HeaderCell>-</Table.HeaderCell>
-                <Table.HeaderCell>-</Table.HeaderCell>
-                <Table.HeaderCell>-</Table.HeaderCell>
+                <Table.HeaderCell>
+                  {get(totalBill, 'paid', '-')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {get(totalBill, 'total', '-')}
+                </Table.HeaderCell>
               </Table.Row>
             </Table.Footer>
           </Table>
