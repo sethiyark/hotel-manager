@@ -35,6 +35,7 @@ export default {
           {
             amount: args.amount,
             createdAt: args.inTime,
+            type: 'room',
           },
         ],
         billPaid: [],
