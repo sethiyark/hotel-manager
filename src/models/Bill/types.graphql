@@ -1,5 +1,6 @@
 # Add bills object types
 type Bill {
+  _id: ID
   billLog: [BillLog]
   billPaid: [BillPaid]
 }

@@ -65,6 +65,7 @@ export const FETCH_CHECKIN_BILL = gql`
         name
       }
       bill {
+        id: _id
         billLog {
           amount
           createdAt
