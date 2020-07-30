@@ -21,7 +21,6 @@ import SignatureCanvas from 'react-signature-canvas';
 import { useQuery, useMutation } from '@apollo/react-hooks';
 import get from 'lodash/get';
 import map from 'lodash/map';
-import forEach from 'lodash/forEach';
 import isEmpty from 'lodash/isEmpty';
 import some from 'lodash/some';
 import { DashboardModal } from '@uppy/react';
@@ -32,6 +31,11 @@ import '@uppy/webcam/dist/style.css';
 import 'react-image-crop/dist/ReactCrop.css';
 
 import { FETCH_ROOM, NEW_CHECK_IN, GET_ROOMS } from '../../api';
+import {
+  IMG_DATA_DIR_KEY,
+  getFileWebViewLink,
+  uploadFile,
+} from '../../utils/drive';
 import './styles/CheckIn.scss';
 import createUppyInstance from './uppy';
 
@@ -66,6 +70,9 @@ const CheckIn = () => {
     state: 'occupied',
     name: '',
     contact: '',
+    imagesIdFront: [],
+    imagesIdBack: [],
+    imageProfile: '',
     address: '',
     time: '',
     inTime: today.toISOString(),
@@ -82,8 +89,8 @@ const CheckIn = () => {
 
   const [openDashboardIndex, setOpenDashboardIndex] = React.useState(-1);
   const [uppyInstances] = React.useState(uppys);
-  const [selectedImgIdFront, setSelectedImgIdFront] = React.useState('');
-  const [selectedImgIdBack, setSelectedImgIdBack] = React.useState('');
+  const [selectedImgIdFront, setSelectedImgIdFront] = React.useState([]);
+  const [selectedImgIdBack, setSelectedImgIdBack] = React.useState([]);
   const [selectedImgProfile, setSelectedImgProfile] = React.useState('');
   const [imageToEdit, setImageToEdit] = React.useState('');
   const [crop, setCrop] = React.useState(BASE_CROP_CONFIG);
@@ -104,6 +111,9 @@ const CheckIn = () => {
     crop,
     imageBeingEdited,
     originalFile,
+    selectedImgIdFront,
+    selectedImgIdBack,
+    selectedImgProfile,
   });
 
   React.useEffect(() => {
@@ -112,12 +122,26 @@ const CheckIn = () => {
       crop,
       imageBeingEdited,
       originalFile,
+      selectedImgIdFront,
+      selectedImgIdBack,
+      selectedImgProfile,
     };
-  }, [openDashboardIndex, crop, imageBeingEdited, originalFile]);
+  }, [
+    openDashboardIndex,
+    crop,
+    imageBeingEdited,
+    originalFile,
+    selectedImgIdFront,
+    selectedImgIdBack,
+    selectedImgProfile,
+  ]);
 
   const registerUppyListeners = () => {
-    forEach(uppyInstances, (i) => {
-      i.setOptions({
+    for (let i = 0; i < uppyInstances.length; i += 1) {
+      const uppyInstance = uppyInstances[i];
+
+      uppyInstance.setOptions({
+        allowMultipleUploads: i !== 2,
         onBeforeFileAdded: (file: UppyFile) => {
           const imgUrl = URL.createObjectURL(file.data);
           setImageToEdit(imgUrl);
@@ -125,7 +149,67 @@ const CheckIn = () => {
           return file.isEdited === true;
         },
       });
-    });
+
+      uppyInstance.on('upload', (d) => {
+        d.fileIDs.forEach((fileId) => {
+          const f = uppyInstance.getFile(fileId);
+          if (!f['uploaded']) {
+            // eslint-disable-next-line no-console
+            console.log('Uploading file : ', f);
+            const fileToUpload = {
+              name: f.name,
+              mimeType: f.type,
+              data: f.data,
+            };
+            uploadFile(fileToUpload, [window[IMG_DATA_DIR_KEY]]).then(
+              (resp) => {
+                if (resp && resp['id']) {
+                  const webViewLink = getFileWebViewLink(resp['id']);
+                  uppyInstance.setFileState(f.id, {
+                    ...f,
+                    preview: webViewLink,
+                    uploaded: true,
+                  });
+                  uppyInstance.emit(
+                    'upload-success',
+                    f,
+                    { uploadURL: webViewLink },
+                    webViewLink
+                  );
+                  switch (i) {
+                    case 0:
+                      setSelectedImgIdFront(
+                        currentState.current.selectedImgIdFront.concat(
+                          webViewLink
+                        )
+                      );
+                      break;
+                    case 1:
+                      setSelectedImgIdBack(
+                        currentState.current.selectedImgIdBack.concat(
+                          webViewLink
+                        )
+                      );
+                      break;
+                    case 2:
+                      setSelectedImgProfile(webViewLink);
+                      break;
+                    default:
+                  }
+                } else {
+                  uppyInstance.setFileState(f.id, {
+                    error: 'No resp after upload',
+                  });
+                  uppyInstance.emit('upload-error', f, {
+                    error: 'No resp after upload',
+                  });
+                }
+              }
+            );
+          }
+        });
+      });
+    }
   };
 
   React.useEffect(() => {
@@ -229,24 +313,6 @@ const CheckIn = () => {
   };
 
   const handleModalClose = () => {
-    const selectedImage = uppyInstances[
-      currentState.current.openDashboardIndex
-    ].getFiles()[0];
-
-    if (selectedImage) {
-      switch (currentState.current.openDashboardIndex) {
-        case 0:
-          setSelectedImgIdFront(selectedImage.preview);
-          break;
-        case 1:
-          setSelectedImgIdBack(selectedImage.preview);
-          break;
-        case 2:
-          setSelectedImgProfile(selectedImage.preview);
-          break;
-        default: // Might be evaluated for -1 as well. Ignore
-      }
-    }
     setOpenDashboardIndex(-1);
   };
 
@@ -260,21 +326,35 @@ const CheckIn = () => {
             <div className="identification">
               <Image
                 src={
-                  selectedImgIdFront ||
-                  'https://react.semantic-ui.com/images/wireframe/square-image.png'
+                  selectedImgIdFront.length > 0
+                    ? selectedImgIdFront[selectedImgIdFront.length - 1]
+                    : 'https://react.semantic-ui.com/images/wireframe/square-image.png'
                 }
                 circular
                 size="tiny"
                 onClick={() => onImageClick('img_id_front')}
+                onLoad={() => {
+                  setCheckInData({
+                    ...checkInData,
+                    imagesIdFront: selectedImgIdFront,
+                  });
+                }}
               />
               <Image
                 src={
-                  selectedImgIdBack ||
-                  'https://react.semantic-ui.com/images/wireframe/square-image.png'
+                  selectedImgIdBack.length > 0
+                    ? selectedImgIdBack[selectedImgIdBack.length - 1]
+                    : 'https://react.semantic-ui.com/images/wireframe/square-image.png'
                 }
                 circular
                 size="tiny"
                 onClick={() => onImageClick('img_id_back')}
+                onLoad={() => {
+                  setCheckInData({
+                    ...checkInData,
+                    imagesIdBack: selectedImgIdBack,
+                  });
+                }}
               />
             </div>
             <div className="customer-info">
@@ -323,6 +403,12 @@ const CheckIn = () => {
               circular
               size="small"
               onClick={() => onImageClick('img_profile')}
+              onLoad={() => {
+                setCheckInData({
+                  ...checkInData,
+                  imageProfile: selectedImgProfile,
+                });
+              }}
             />
             <Label size="medium">
               Room no.
@@ -424,6 +510,7 @@ const CheckIn = () => {
                     setIsSubmitting(true);
                     newCheckInMutation({ variables: checkInData })
                       .catch((err) => {
+                        // eslint-disable-next-line no-console
                         console.log(err);
                       })
                       .finally(() => {
@@ -467,6 +554,7 @@ const CheckIn = () => {
           onRequestClose={handleModalClose}
           showLinkToFileUploadResult
           proudlyDisplayPoweredByUppy={false}
+          hideUploadButton
         />
       ))}
       <Modal

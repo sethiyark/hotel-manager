@@ -3,16 +3,16 @@ import { Schema, model } from 'mongoose';
 const customerSchema = new Schema({
   name: String,
   address: String,
-  idProofs: [
-    {
-      idType: String,
-      scans: [
-        {
-          imgUrl: String,
-        },
-      ],
+  imageProfile: String,
+  idProof: {
+    idType: {
+      type: String,
+      enum: ['drivingLicense', 'adhaar', 'other'],
+      default: 'other',
     },
-  ],
+    imagesIdFront: [String],
+    imagesIdBack: [String],
+  },
   contact: String,
 });
 

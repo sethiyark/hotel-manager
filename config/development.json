@@ -15,7 +15,7 @@
   "auth": {
     "access_token_secret": "appAdm1n",
     "refresh_token_secret": "appAdm1n",
-    "access_token_life": "1d",
+    "access_token_life": "30d",
     "refresh_token_life": "7d"
   }
 }
