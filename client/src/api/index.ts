@@ -68,6 +68,7 @@ export const FETCH_CHECKIN_BILL = gql`
         billLog {
           amount
           createdAt
+          type
         }
         billPaid {
           amount
