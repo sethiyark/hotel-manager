@@ -16,6 +16,7 @@ import get from 'lodash/get';
 import without from 'lodash/without';
 import flatMap from 'lodash/flatMap';
 import filter from 'lodash/filter';
+import Cookies from 'universal-cookie';
 
 import { RoomIcon } from '../../components';
 import { GET_ROOMS } from '../../api';
@@ -25,6 +26,9 @@ import BookingModal from './BookingModal';
 import RoomActions from './RoomActions';
 
 import './styles/Dashboard.scss';
+
+const cookies = new Cookies();
+const user = JSON.parse(cookies.get('user') || '{}');
 
 const Dashboard = () => {
   const { loading, data } = useQuery(GET_ROOMS);
@@ -51,6 +55,13 @@ const Dashboard = () => {
     const mirror = !!(index % 2);
     const { displayName, config, id, checkIn } = room;
     const state = get(checkIn, 'state', '');
+
+    const isStaff = user.role === 'staff';
+    const [housekeeping, setHousekeeping] = React.useState(isStaff);
+
+    const toggleHousekeeping = () => {
+      setHousekeeping(!housekeeping);
+    };
 
     const openModal = useLongPress(() => {
       setIsOpenId(id);
@@ -94,9 +105,19 @@ const Dashboard = () => {
             <Icon name="bed" />
             Room:&nbsp;
             {displayName}
+            {isStaff ? null : (
+              <Button
+                floated="right"
+                toggle
+                active={housekeeping}
+                onClick={toggleHousekeeping}
+              >
+                Housekeeping
+              </Button>
+            )}
           </Modal.Header>
           <Modal.Content>
-            <Room room={room} mirror={mirror} />
+            <Room room={room} mirror={mirror} housekeeping={housekeeping} />
           </Modal.Content>
         </Modal>
       </Grid.Column>

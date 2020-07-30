@@ -49,6 +49,35 @@ export const FETCH_ROOM = gql`
   }
 `;
 
+export const FETCH_CHECKIN_BILL = gql`
+  query CheckIn($id: ID!) {
+    checkIn(id: $id) {
+      id: _id
+      nOccupants
+      rooms {
+        id: _id
+        displayName
+      }
+      inTime
+      state
+      customer {
+        name
+      }
+      bill {
+        billLog {
+          amount
+          createdAt
+        }
+        billPaid {
+          amount
+          createdAt
+          mode
+        }
+      }
+    }
+  }
+`;
+
 export const NEW_CHECK_IN = gql`
   mutation CheckIn(
     $name: String

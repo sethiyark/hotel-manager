@@ -1,0 +1,26 @@
+.bill {
+  .bill {
+    &__title {
+      line-height: 35px;
+
+      span {
+        display: inline-block;
+        width: 33.3%;
+      }
+
+      &__name {
+        text-align: center;
+        text-transform: uppercase;
+      }
+
+      &__profile {
+        position: absolute;
+        top: 21px;
+        right: 35px;
+      }
+    }
+    &__field {
+      // border: 1px solid gray;
+    }
+  }
+}

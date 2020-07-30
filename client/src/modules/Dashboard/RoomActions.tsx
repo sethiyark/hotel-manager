@@ -21,6 +21,10 @@ const RoomActions = ({
     const checkInUrl = `checkin/${map(activeRooms, 'id').join(',')}`;
     history.push(checkInUrl);
   };
+  const goToBill = () => {
+    const billUrl = `bill/${get(activeRooms, '0.checkIn.id')}`;
+    history.push(billUrl);
+  };
 
   const customerName = get(activeRooms, '0.checkIn.customer.name', '');
   const inTime = get(activeRooms, '0.checkIn.inTIme');
@@ -60,7 +64,7 @@ const RoomActions = ({
               content="Check-out"
               size="big"
               color="red"
-              onClick={goToCheckIn}
+              onClick={goToBill}
             />
           </Grid.Column>
           <Grid.Column width={12}>{customerInfo}</Grid.Column>

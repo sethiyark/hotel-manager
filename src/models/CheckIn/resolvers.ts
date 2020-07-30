@@ -1,9 +1,16 @@
-import { Customer, CheckIn, Bill } from '..';
+import { Customer, CheckIn, Bill, Room } from '..';
 
 export default {
   CheckIn: {
     customer: async (checkIn) => checkIn.getCustomer(),
     bill: async (checkIn) => checkIn.getBill(),
+    rooms: async (checkIn) => Room.find({ _id: checkIn.roomIds }),
+  },
+
+  Query: {
+    checkIn: async (root, args) => {
+      return CheckIn.findById(args.id);
+    },
   },
 
   Mutation: {

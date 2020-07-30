@@ -6,14 +6,20 @@ import { RoomIcon } from '../../components';
 const Room = ({
   room,
   mirror,
+  housekeeping,
 }: {
   room: Record<string, any>;
   mirror: boolean;
+  housekeeping: boolean;
 }) => {
   const { displayName, config } = room;
 
   const roomInfo = () => {
     return <>Info</>;
+  };
+
+  const roomHousekeeping = () => {
+    return <>Housekeeping</>;
   };
 
   return (
@@ -28,7 +34,7 @@ const Room = ({
         />
       </Grid.Column>
       <Grid.Column stretched width={7} className="room-actions">
-        {roomInfo()}
+        {housekeeping ? roomHousekeeping() : roomInfo()}
       </Grid.Column>
     </Grid>
   );

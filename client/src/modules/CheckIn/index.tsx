@@ -75,7 +75,7 @@ const CheckIn = () => {
     imageProfile: '',
     address: '',
     time: '',
-    inTime: today.toISOString,
+    inTime: today.toISOString(),
     nOccupants: 1,
     amount: 1500,
     toiletries: 0,
