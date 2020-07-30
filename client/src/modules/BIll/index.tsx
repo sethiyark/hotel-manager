@@ -130,11 +130,21 @@ const Bill = () => {
         </Grid.Column>
       </Grid.Row>
       <Grid.Row columns={2}>
-        <Grid.Column>Increase Stay</Grid.Column>
         <Grid.Column>
-          <span>Proceed</span>
-          <span>Checkout</span>
-          <span>Print</span>
+          <Button basic color="black">
+            Increase Stay
+          </Button>
+        </Grid.Column>
+        <Grid.Column>
+          <Button basic color="violet">
+            Proceed
+          </Button>
+          <Button basic color="violet">
+            Checkout
+          </Button>
+          <Button basic color="violet">
+            Print
+          </Button>
         </Grid.Column>
       </Grid.Row>
     </Grid>
